@@ -40,6 +40,20 @@ const Room = () => {
                     };
                 });
                 break;
+            case 'update_seats':
+                setRoomData(previousData => {
+                    const updatedSeats = [...previousData.seats];
+                    if (result.update_seats.action === "add") {
+                        updatedSeats.push(null);
+                    } else if (result.update_seats.action === "remove" && updatedSeats.length > 0) {
+                        updatedSeats.pop();
+                    }
+                    return {
+                        ...previousData,
+                        seats: updatedSeats
+                    };
+                });
+                break;
             default:
                 // Обрабатывайте другие типы сообщений или ошибки
                 break;
@@ -198,7 +212,8 @@ const Room = () => {
                                             boxShadow: '0 0 5px 1px rgba(0, 0, 0, 0.2)',
                                             height: 200,
                                             width: 170,
-                                            borderRadius: 30
+                                            borderRadius: 30,
+                                            marginRight: 20
                                         }}
                                         key={index + 1}
                                         onClick={
@@ -213,6 +228,11 @@ const Room = () => {
                                         {seat ? seat : 'плюс'}
                                     </div>
                                 ))}
+                                {(roomData.creator === store.user_id || (roomData.seats && roomData.seats[0] === store.user_id)) &&
+                                <div>
+                                    кпноки добавить убрать стул
+                                </div>
+                                }
                             </div>
                         </>
                         :

@@ -76,7 +76,7 @@ const Rooms = () => {
     const handleCreateRoom = async () => {
         try {
             const {data} = await axios.post(
-                `${API_URL}api/create_room/`,
+                `http://${API_URL}/api/create_room/`,
                 {
                     name: roomName,
                     password: roomPassword,

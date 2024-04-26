@@ -83,7 +83,7 @@ const MouseParticleTrail = () => {
         };
     }, []);
 
-    return <canvas ref={canvasRef} style={{position: "fixed", top: 70, left: 0, width: "100%", height: "100%"}} />;
+    return <canvas ref={canvasRef} style={{position: "fixed", top: 70, left: 0, width: "100%", height: "calc(100vh - 90px)"}} />;
 };
 
 export default MouseParticleTrail;

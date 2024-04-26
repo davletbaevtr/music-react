@@ -1,38 +1,42 @@
 .App {
-  text-align: center;
+    text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.textlink {
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+    font-size: 20px;
+    font-weight: 500;
+    transition: all 200ms ease;
+    transform: scale(1);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.textlink:hover {
+    transform: scale(1.1);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.custom-scroll::-webkit-scrollbar {
+    display: none;
 }
 
-.App-link {
-  color: #61dafb;
+.room-row {
+    cursor: pointer;
+    border-right: 2px solid white;
+    border-left: 2px solid white;
+    transition: background-color 200ms ease; /* Добавьте плавное изменение фона */
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.room-row:hover {
+    background-color: rgba(0, 0, 0, 0.05); /* Легкий эффект наведения */
 }
+
+.room-row.selected {
+    background-color: rgba(25, 118, 210, 0.08); /* Цвет фона для выбранной строки */
+}
+
+.room-row.selected:hover {
+    background-color: rgba(25, 118, 210, 0.16);
+}
+
+

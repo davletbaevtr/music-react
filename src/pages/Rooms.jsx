@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {TextField} from "@mui/material";
 import MyButton from "../components/UI/MyButton";
 import axios from "axios";
-import {API_URL} from "../utils/consts";
+import {API_URL, WS_API_URL} from "../utils/consts";
 import {useNavigate} from "react-router-dom";
 import {observer} from "mobx-react-lite";
 import RoomTable from "../components/UI/RoomTable";
@@ -21,7 +21,7 @@ const Rooms = () => {
     const [currentRoomId, setCurrentRoomId] = useState(null);
 
     useEffect(() => {
-        const ws = new WebSocket(`ws://${API_URL}/ws/rooms/info/`);
+        const ws = new WebSocket(`${WS_API_URL}/ws/rooms/info/`);
         ws.onmessage = handleMessage;
         ws.onopen = () => {
             console.log('WebSocket connected');
@@ -76,7 +76,7 @@ const Rooms = () => {
     const handleCreateRoom = async () => {
         try {
             const {data} = await axios.post(
-                `http://${API_URL}/api/create_room/`,
+                `${API_URL}/api/create_room/`,
                 {
                     name: roomName,
                     password: roomPassword,
@@ -166,7 +166,7 @@ const Rooms = () => {
                             <div style={{display: "flex", flexDirection: "column", justifyContent: "space-between", height: "100%"}}>
                                 <div>
                                     <div>
-                                        Статус: {roomInfo.status === 0 ? 'Ожидание игроков' : `${roomInfo.status}/${roomInfo.max_rounds}`}
+                                        Статус: {roomInfo.round === 0 ? 'Ожидание игроков' : `${roomInfo.round}/${roomInfo.max_rounds}`}
                                     </div>
                                     <div>
                                         Игроки: {roomInfo.players.length > 0 ? roomInfo.players : 'Пока никого нет'}

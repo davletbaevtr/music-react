@@ -18,7 +18,7 @@ const MainButton = styled(MyButton)`
                     0px 2px 80px 0px #B334E6;
         transform: scale(1.1);
         font-size: 21px;
-        margin-bottom: 68px;
+        margin-bottom: 69px;
     }
 `;
 

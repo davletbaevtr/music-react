@@ -4,7 +4,7 @@ import {Alert, CircularProgress, Slide, Snackbar, TextField} from "@mui/material
 import MyButton from "../components/UI/MyButton";
 import {observer} from "mobx-react-lite";
 import {Context} from "../index";
-import {API_URL, WS_API_URL} from "../utils/consts";
+import {WS_API_URL} from "../utils/consts";
 import AddPlaylistDialog from "../components/UI/AddPlaylistDialog";
 
 function SlideTransition(props) {
@@ -225,7 +225,7 @@ const Room = () => {
             setWebsocket(ws);
         };
 
-        ws.onclose = (event) => {
+        ws.onclose = () => {
             setNeedReconnect(true);
             setFirstIsLoading(false);
             console.log('дисконект');
@@ -248,7 +248,7 @@ const Room = () => {
             setWebsocket(ws);
         };
 
-        ws.onclose = (event) => {
+        ws.onclose = () => {
             setNeedReconnect(true);
             setAuthIsLoading(false);
             setAuthError(true);

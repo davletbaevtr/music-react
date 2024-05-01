@@ -36,7 +36,7 @@ const MouseParticleTrail = () => {
             return `${f(0)}${f(8)}${f(4)}`;
         }
 
-        const createParticle = (x, y, hue) => {
+        const createParticle = (x, y) => {
             const size = 30; // Можно менять размер ноты
             const hsl = getRandomColorHSL()
             const color = hslToHex(hsl, 100, 50)

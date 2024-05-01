@@ -6,7 +6,7 @@ const MainButton = styled(MyButton)`
     width: 300px;
     padding-top: 20px;
     padding-bottom: 20px;
-    
+
     transition: all 300ms ease;
     box-shadow: none;
     transform: scale(1);
@@ -14,8 +14,8 @@ const MainButton = styled(MyButton)`
     margin-bottom: 70px;
 
     &:hover {
-        box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.4),
-                    0px 2px 80px 0px #B334E6;
+        box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.4),
+        0 2px 80px 0 #B334E6;
         transform: scale(1.1);
         font-size: 21px;
         margin-bottom: 69px;

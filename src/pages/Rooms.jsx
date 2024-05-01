@@ -16,6 +16,7 @@ const Rooms = () => {
     const [roomInfo, setRoomInfo] = useState({});
     const [maxRounds, setMaxRounds] = useState(4);
     const [playersCount, setPlayersCount] = useState(4);
+    // TODO
     const [createRoomError, setCreateRoomError] = useState(false);
     const [websocket, setWebsocket] = useState(null);
     const [currentRoomId, setCurrentRoomId] = useState(null);

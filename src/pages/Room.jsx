@@ -31,7 +31,6 @@ const Room = () => {
         return parseFloat(localStorage.getItem('audioVolume')) || 1;
     });
 
-
     const handleMessage = (event) => {
         const result = JSON.parse(event.data);
         console.log(result);
@@ -428,7 +427,7 @@ const Room = () => {
                                                 roomData.seats.includes(store.user_id)
                                                     ?
                                                     (
-                                                        roomData.seats[0] === store.user_id
+                                                        roomData.seats && roomData.seats[0] === store.user_id
                                                             ?
                                                             (
                                                                 roomData.playlists && Object.keys(roomData.playlists).length > 0
@@ -518,7 +517,7 @@ const Room = () => {
                                 width: "100%",
                                 justifyContent: "center"
                             }}>
-                                {roomData.seats?.slice(1).map((seat, index) => (
+                                {roomData.seats && roomData.seats?.slice(1).map((seat, index) => (
                                     <div
                                         style={{
                                             boxShadow: '0 0 5px 1px rgba(0, 0, 0, 0.2)',
@@ -539,14 +538,14 @@ const Room = () => {
                                     >
                                         {seat ?
                                             <>
-                                                <div>{roomData.usernames[index + 1]}</div>
-                                                <div>{roomData.scores[index + 1]}</div>
+                                                <div>{roomData.usernames && roomData.usernames[index + 1]}</div>
+                                                <div>{roomData.scores && roomData.scores[index + 1]}</div>
                                             </>
                                             : 'плюс'
                                         }
                                     </div>
                                 ))}
-                                {(roomData.creator === store.user_id || (roomData.seats && roomData.seats.seats[0] === store.user_id)) &&
+                                {(roomData.creator === store.user_id || (roomData.seats && roomData.seats[0] === store.user_id)) &&
                                     <div style={{margin: '10px'}}>
                                         <MyButton onClick={() => handleSeatUpdate('add')} style={{marginRight: '5px'}}>
                                             Добавить стул

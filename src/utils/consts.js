@@ -1,6 +1,6 @@
 export const MAIN_ROUTE = '/'
-export const API_URL = 'http://api.meloparty.ru'
-export const WS_API_URL = 'ws://api.meloparty.ru'
+export const API_URL = 'http://82.97.250.84'
+export const WS_API_URL = 'ws://82.97.250.84:8001'
 
 export const ROOMS_ROUTE = '/rooms/'
 

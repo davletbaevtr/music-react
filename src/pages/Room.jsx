@@ -491,7 +491,7 @@ const Room = () => {
 
                                                     {roomData.seats && roomData.seats[0] === store.user_id &&
                                                         <MyButton onClick={handleNextTrack}>
-                                                        Следующий трек
+                                                            Следующий трек
                                                         </MyButton>
                                                     }
                                                 </div>

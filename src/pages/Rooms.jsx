@@ -7,6 +7,9 @@ import {useNavigate} from "react-router-dom";
 import {observer} from "mobx-react-lite";
 import RoomTable from "../components/UI/RoomTable";
 import {Context} from "../index";
+import log from 'loglevel';
+
+log.setLevel(log.levels.DEBUG);
 
 const Rooms = () => {
     const {store} = useContext(Context);
@@ -22,12 +25,15 @@ const Rooms = () => {
     const [currentRoomId, setCurrentRoomId] = useState(null);
 
     useEffect(() => {
+        log.debug('Try to connect WebSocket')
         const ws = new WebSocket(`${WS_API_URL}/ws/rooms/info/`);
         ws.onmessage = handleMessage;
         ws.onopen = () => {
+            log.debug("WebSocket connected");
             console.log('WebSocket connected');
         };
         ws.onclose = () => {
+            log.debug("WebSocket Closed");
             console.log('WebSocket closed')
         }
         setWebsocket(ws);
@@ -41,6 +47,7 @@ const Rooms = () => {
 
     const handleMessage = (event) => {
         const result = JSON.parse(event.data);
+        log.debug('ws message from backend', result)
         console.log(result);
         switch (result.type) {
             case 'update_list':

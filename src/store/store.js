@@ -22,8 +22,8 @@ export default class Store {
         if (uuidRegex.test(user_id)) {
             try {
                 log.debug(`try to post ${API_URL}/api/check_user/ with data`, { user_id: user_id })
-                await axios.post(`${API_URL}/api/check_user/`, { user_id: user_id });
-                log.debug(`200 from ${API_URL}/api/check_user/`)
+                const response = await axios.post(`${API_URL}/api/check_user/`, { user_id: user_id });
+                log.debug(`200 from ${API_URL}/api/check_user/`, response)
                 runInAction(() => {
                     this.user_id = user_id;
                     this.username = localStorage.getItem('username')
@@ -32,10 +32,10 @@ export default class Store {
                 log.debug(`error ${API_URL}/api/check_user/`, error)
                 try {
                     log.debug(`try to post ${API_URL}/api/create_user/ with data`, { username: this.username })
-                    const { data } = await axios.post(`${API_URL}/api/create_user/`, { username: this.username });
-                    log.debug(`200 from ${API_URL}/api/create_user/ with response.data`, data)
+                    const response = await axios.post(`${API_URL}/api/create_user/`, { username: this.username });
+                    log.debug(`200 from ${API_URL}/api/create_user/ with response`, response.data)
                     runInAction(() => {
-                        this.setUserId(data.user_id);
+                        this.setUserId(response.data.user_id);
                         localStorage.setItem('username', this.username);
                         localStorage.setItem('warning1', 'Удалив или поменяв данные здесь вы сломаете себе и только себе игру');
                         localStorage.setItem('warning2', 'если поменяв у вас сломалась игра, удалите все строки и обновите страницу');
@@ -50,10 +50,10 @@ export default class Store {
         } else {
             try {
                 log.debug(`try to post ${API_URL}/api/create_user/ with data`, { username: this.username })
-                const { data } = await axios.post(`${API_URL}/api/create_user/`, { username: this.username });
-                log.debug(`200 from ${API_URL}/api/create_user/ with response.data`, data)
+                const response = await axios.post(`${API_URL}/api/create_user/`, { username: this.username });
+                log.debug(`200 from ${API_URL}/api/create_user/ with response`, response)
                 runInAction(() => {
-                    this.setUserId(data.user_id);
+                    this.setUserId(response.data.user_id);
                     localStorage.setItem('username', this.username);
                     localStorage.setItem('warning1', 'Удалив или поменяв данные здесь вы сломаете себе и только себе игру');
                     localStorage.setItem('warning2', 'если поменяв у вас сломалась игра, удалите все строки и обновите страницу');

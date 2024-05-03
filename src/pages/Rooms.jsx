@@ -30,11 +30,9 @@ const Rooms = () => {
         ws.onmessage = handleMessage;
         ws.onopen = () => {
             log.debug("WebSocket connected");
-            console.log('WebSocket connected');
         };
         ws.onclose = () => {
             log.debug("WebSocket Closed");
-            console.log('WebSocket closed')
         }
         setWebsocket(ws);
 
@@ -48,7 +46,6 @@ const Rooms = () => {
     const handleMessage = (event) => {
         const result = JSON.parse(event.data);
         log.debug('ws message from backend', result)
-        console.log(result);
         switch (result.type) {
             case 'update_list':
                 setRooms(rooms => [...rooms, result.room]);

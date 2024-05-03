@@ -4,7 +4,7 @@ import {Alert, CircularProgress, Slide, Snackbar, TextField} from "@mui/material
 import MyButton from "../components/UI/MyButton";
 import {observer} from "mobx-react-lite";
 import {Context} from "../index";
-import {WS_API_URL} from "../utils/consts";
+import {API_URL, WS_API_URL} from "../utils/consts";
 import AddPlaylistDialog from "../components/UI/AddPlaylistDialog";
 
 function SlideTransition(props) {
@@ -322,7 +322,7 @@ const Room = () => {
             }}
         >
             <audio id='audioPlayer'>
-                <source src={audioUrl} type="audio/mp3"/>
+                <source src={`${API_URL}${audioUrl}`} type="audio/mp3"/>
                 Your browser does not support the audio element.
             </audio>
             {firstIsLoading ?

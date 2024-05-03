@@ -31,7 +31,7 @@ const AddPlaylistDialog = ({roomId}) => {
         try {
             setError(false);
             setIsLoading(true);
-            await axios.post(`http://${API_URL}/api/add_playlist/`, {name: playlistName, url: url, room_id: roomId});
+            await axios.post(`${API_URL}/api/add_playlist/`, {name: playlistName, url: url, room_id: roomId});
             handleClose();
         } catch (error) {
             setError(true);

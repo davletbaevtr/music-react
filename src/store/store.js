@@ -26,7 +26,7 @@ export default class Store {
                 log.debug(`200 from ${API_URL}/api/check_user/`, response)
                 runInAction(() => {
                     this.user_id = user_id;
-                    this.username = localStorage.getItem('username')
+                    this.username = response.data.username
                 });
             } catch (error) {
                 log.debug(`error ${API_URL}/api/check_user/`, error)
@@ -73,7 +73,6 @@ export default class Store {
             await axios.post(`${API_URL}/api/update_user/`, { username: str, user_id: this.user_id, room_id: this.room_id });
             runInAction(() => {
                 this.username = str;
-                localStorage.setItem('username', str);
             });
         } catch (error) {
             runInAction(() => {

@@ -321,7 +321,7 @@ const Room = () => {
                 alignItems: "center"
             }}
         >
-            <audio id='audioPlayer'>
+            <audio id='audioPlayer' muted>
                 <source src={`${API_URL}${audioUrl}`} type="audio/mp3"/>
                 Your browser does not support the audio element.
             </audio>

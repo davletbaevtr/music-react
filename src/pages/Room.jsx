@@ -257,6 +257,9 @@ const Room = () => {
     useEffect(() => {
         store.room_id = roomId;
         checkFirstPassword();
+        return () => {
+            store.room_id = -1
+        }
     }, []);
 
     useEffect(() => {

@@ -27,9 +27,7 @@ const Room = () => {
 
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
-    const [volume, setVolume] = useState(() => {
-        return parseFloat(localStorage.getItem('audioVolume')) || 1;
-    });
+    const [volume, setVolume] = useState(0);
 
     const handleMessage = (event) => {
         const result = JSON.parse(event.data);
@@ -204,10 +202,11 @@ const Room = () => {
         const audio = document.getElementById('audioPlayer');
         if (audio) {
             audio.volume = volume;
+            if (audio.muted) {
+                audio.muted = false;
+            }
         }
 
-        // Сохраняем текущую громкость в localStorage
-        localStorage.setItem('audioVolume', volume);
     }, [volume]);
 
     const checkFirstPassword = () => {
@@ -321,10 +320,10 @@ const Room = () => {
                 alignItems: "center"
             }}
         >
-            <audio id='audioPlayer' muted>
+            <video id='audioPlayer' muted>
                 <source src={`${API_URL}${audioUrl}`} type="audio/mp3"/>
                 Your browser does not support the audio element.
-            </audio>
+            </video>
             {firstIsLoading ?
                 <CircularProgress/>
                 :

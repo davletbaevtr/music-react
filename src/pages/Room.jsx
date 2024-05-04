@@ -320,7 +320,7 @@ const Room = () => {
                 alignItems: "center"
             }}
         >
-            <video id='audioPlayer' muted>
+            <video id='audioPlayer' muted hidden>
                 <source src={`${API_URL}${audioUrl}`} type="audio/mp3"/>
                 Your browser does not support the audio element.
             </video>

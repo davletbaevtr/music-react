@@ -79,20 +79,22 @@ const Rooms = () => {
 
 
     const handleCreateRoom = async () => {
-        try {
-            const {data} = await axios.post(
-                `${API_URL}/api/create_room/`,
-                {
-                    name: roomName,
-                    password: roomPassword,
-                    max_rounds: maxRounds,
-                    players_count: playersCount,
-                    creator: store.user_id,
-                },
-            )
-            navigate(`/rooms/${data.id}`)
-        } catch (error) {
-            setCreateRoomError(true);
+        if (roomName.length > 0) {
+            try {
+                const {data} = await axios.post(
+                    `${API_URL}/api/create_room/`,
+                    {
+                        name: roomName,
+                        password: roomPassword,
+                        max_rounds: maxRounds,
+                        players_count: playersCount,
+                        creator: store.user_id,
+                    },
+                )
+                navigate(`/rooms/${data.id}`)
+            } catch (error) {
+                setCreateRoomError(true);
+            }
         }
     };
 
@@ -235,12 +237,12 @@ const Rooms = () => {
                             }}
                         />
                         <div className="rounds-slider-container">
-                            <input type="range" min="1" max="10" value={maxRounds} className="rounds-range-slider"
+                            <input type="range" min="1" max="10" value={maxRounds} className="range-slider"
                                    id="roundsRange" onChange={handleMaxRoundsChange}/>
                             <div style={{marginTop: 10}} id="roundsValue">Количество раундов: {maxRounds}</div>
                         </div>
                         <div className="rounds-slider-container">
-                            <input type="range" min="1" max="10" value={playersCount} className="rounds-range-slider"
+                            <input type="range" min="1" max="10" value={playersCount} className="range-slider"
                                    id="playersCountRange" onChange={handlePlayersCountChange}/>
                             <div style={{marginTop: 10}} id="playersCountValue">Количество игроков: {playersCount}</div>
                         </div>

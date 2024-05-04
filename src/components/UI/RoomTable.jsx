@@ -44,7 +44,7 @@ function RoomTable({data, handleRowClickOuter}) {
                 <thead>
                 {headerGroups.map(headerGroup => (
                     <tr {...headerGroup.getHeaderGroupProps()}
-                        style={{borderRight: '2px solid rgba(255, 255, 255, 1)', cursor: "pointer"}}>
+                        style={{borderRight: '2px solid rgba(255, 255, 255, 1)', cursor: "pointer", borderBottom: '1px solid rgba(0,0,0,0.12)'}}>
                         {headerGroup.headers.map(column => (
                             <th {...column.getHeaderProps(column.getSortByToggleProps())} style={{
                                 ...column.style,
@@ -64,21 +64,26 @@ function RoomTable({data, handleRowClickOuter}) {
                 ))}
                 </thead>
                 <tbody {...getTableBodyProps()}>
-                {rows.map(row => {
-                    prepareRow(row);
-                    return (
-                        <tr {...row.getRowProps()} onClick={() => handleRowClick(row.original.room_id)}
-                            className={`room-row ${row.original.room_id === selectedRow ? 'selected' : ''}`}>
-                            {row.cells.map(cell => {
-                                return <td {...cell.getCellProps()} style={{
-                                    border: '1px solid rgba(0,0,0,0.12)',
-                                    paddingLeft: 10,
-                                    height: 47
-                                }}>{cell.render('Cell')}</td>;
-                            })}
-                        </tr>
-                    );
-                })}
+                {rows.length > 0 ? rows.map(row => {
+                        prepareRow(row);
+                        return (
+                            <tr {...row.getRowProps()} onClick={() => handleRowClick(row.original.room_id)}
+                                className={`room-row ${row.original.room_id === selectedRow ? 'selected' : ''}`}>
+                                {row.cells.map(cell => {
+                                    return <td {...cell.getCellProps()} style={{
+                                        border: '1px solid rgba(0,0,0,0.12)',
+                                        paddingLeft: 10,
+                                        height: 47
+                                    }}>{cell.render('Cell')}</td>;
+                                })}
+                            </tr>
+                        );
+                    })
+                    :
+                    <div style={{width: '100%', textAlign: "center", marginTop: 20, position: "absolute"}}>
+                        Пока нет комнат
+                    </div>
+                }
                 </tbody>
             </table>
         </div>

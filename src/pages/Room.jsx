@@ -41,7 +41,7 @@ const Room = () => {
     const [audioTitle, setAudioTitle] = useState('');
     const [audioArtists, setAudioArtists] = useState([]);
 
-    const [knowButtonHidden, setKnowButtonHidden] = useState(true);
+    const [knowButtonVisible, setKnowButtonVisible] = useState(false);
 
     const handleMessage = (event) => {
         const result = JSON.parse(event.data);
@@ -169,7 +169,7 @@ const Room = () => {
                         audio1.play();
                     }
                 } else {
-                    setKnowButtonHidden(true);
+                    setKnowButtonVisible(false);
                 }
                 break;
             default:
@@ -366,6 +366,7 @@ const Room = () => {
         if (!iKnowisClickable) {
             return;
         }
+        console.log('click')
         setIKnowIsClickable(false);
         if (websocket && websocket.readyState === WebSocket.OPEN) {
             const message = JSON.stringify({type: 'i_know', user_id: store.user_id});
@@ -594,11 +595,10 @@ const Room = () => {
                                                                 Следующий трек
                                                             </MyButton>
                                                         }
-                                                        {roomData.seats && roomData.seats.slice(1).includes(store.user_id) &&
+                                                        {roomData.seats && roomData.seats.slice(1).includes(store.user_id) && knowButtonVisible &&
                                                             <MyButton
                                                                 onClick={handleIKnow}
                                                                 disabled={!iKnowisClickable}
-                                                                hidden={knowButtonHidden}
                                                             >
                                                                 Я знаю
                                                             </MyButton>

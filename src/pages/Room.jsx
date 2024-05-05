@@ -139,6 +139,7 @@ const Room = () => {
                 setAudioUrl(result.message.url);
                 setAudioTitle(result.message.title)
                 setAudioArtists(result.message.artists)
+                setShowAnswer(false);
                 break;
             case 'round_update':
                 setRoomData(previousData => {

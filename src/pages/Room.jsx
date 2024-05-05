@@ -43,6 +43,8 @@ const Room = () => {
 
     const [knowButtonVisible, setKnowButtonVisible] = useState(false);
 
+    const [showAnswer, setShowAnswer] = useState(false);
+
     const handleMessage = (event) => {
         const result = JSON.parse(event.data);
         switch (result.type) {
@@ -170,6 +172,7 @@ const Room = () => {
                     }
                 } else {
                     setKnowButtonVisible(false);
+                    setShowAnswer(true);
                 }
                 break;
             default:
@@ -564,31 +567,47 @@ const Room = () => {
                                                             </div>
                                                         )}
 
-                                                        <div style={{
-                                                            width: '100%',
-                                                            height: '20px',
-                                                            backgroundColor: '#ddd'
-                                                        }}>
-                                                            <div style={{
-                                                                height: '100%',
-                                                                backgroundColor: 'blue',
-                                                                width: `${(currentTime / duration) * 100}%`
-                                                            }}/>
-                                                        </div>
-                                                        <div>
-                                                            <label>
-                                                                Громкость:
-                                                                <input
-                                                                    type="range"
-                                                                    min="0"
-                                                                    max="1"
-                                                                    step="0.01"
-                                                                    value={volume}
-                                                                    onChange={(e) => setVolume(parseFloat(e.target.value))}
-                                                                    style={{verticalAlign: 'middle'}}
-                                                                />
-                                                            </label>
-                                                        </div>
+                                                        {showAnswer ?
+                                                            <>
+                                                                <div style={{fontSize: 20}}>
+                                                                    title: {audioTitle}
+                                                                </div>
+                                                                <div style={{fontSize: 20}}>
+                                                                    artists:
+                                                                    {audioArtists.map((name) => (
+                                                                        ` ${name}, `
+                                                                    ))}
+                                                                </div>
+                                                            </>
+                                                            :
+                                                            <>
+                                                                <div style={{
+                                                                    width: '100%',
+                                                                    height: '20px',
+                                                                    backgroundColor: '#ddd'
+                                                                }}>
+                                                                    <div style={{
+                                                                        height: '100%',
+                                                                        backgroundColor: 'blue',
+                                                                        width: `${(currentTime / duration) * 100}%`
+                                                                    }}/>
+                                                                </div>
+                                                                <div>
+                                                                    <label>
+                                                                        Громкость:
+                                                                        <input
+                                                                            type="range"
+                                                                            min="0"
+                                                                            max="1"
+                                                                            step="0.01"
+                                                                            value={volume}
+                                                                            onChange={(e) => setVolume(parseFloat(e.target.value))}
+                                                                            style={{verticalAlign: 'middle'}}
+                                                                        />
+                                                                    </label>
+                                                                </div>
+                                                            </>
+                                                        }
 
                                                         {roomData.seats && roomData.seats[0] === store.user_id &&
                                                             <MyButton onClick={handleNextTrack}>

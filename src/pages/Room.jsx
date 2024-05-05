@@ -36,6 +36,7 @@ const Room = () => {
 
     const [userAnswer, setUserAnswer] = useState(null);
     const [knowPause, setKnowPause] = useState(false);
+    const [iKnowisClickable, setIKnowIsClickable] = useState(true);
 
     const handleMessage = (event) => {
         const result = JSON.parse(event.data);
@@ -142,6 +143,10 @@ const Room = () => {
             case 'i_know_create':
                 setKnowPause(true);
                 setUserAnswer(result.message);
+                const audio = document.getElementById('audioPlayer');
+                if (!audio.paused) {
+                    audio.pause();
+                }
                 break;
             case 'i_know_delete':
                 setKnowPause(false);
@@ -152,6 +157,9 @@ const Room = () => {
                         scores: result.scores
                     };
                 });
+                if (audio.paused) {
+                    audio.play();
+                }
                 break;
             default:
                 // Обрабатывайте другие типы сообщений или ошибки
@@ -195,17 +203,6 @@ const Room = () => {
             }
         };
     }, [audioUrl]);
-
-    useEffect(() => {
-        const audio = document.getElementById('audioPlayer');
-
-        if (knowPause && !audio.paused) {
-            audio.pause();
-        }
-        if (!knowPause && audio.paused) {
-            audio.play()
-        }
-    }, [knowPause]);
 
     useEffect(() => {
         const audio = document.getElementById('audioPlayer');
@@ -353,10 +350,17 @@ const Room = () => {
     }
 
     const handleIKnow = () => {
+        if (!iKnowisClickable) {
+            return;
+        }
+        setIKnowIsClickable(false);
         if (websocket && websocket.readyState === WebSocket.OPEN) {
             const message = JSON.stringify({type: 'i_know', user_id: store.user_id});
             websocket.send(message);
         }
+        setTimeout(() => {
+            setIKnowIsClickable(true);
+        }, 1000);
     }
 
     return (
@@ -570,7 +574,7 @@ const Room = () => {
                                                             </MyButton>
                                                         }
                                                         {roomData.seats && roomData.seats.slice(1).includes(store.user_id) &&
-                                                            <MyButton onClick={handleIKnow}>
+                                                            <MyButton onClick={handleIKnow} disabled={!iKnowisClickable}>
                                                                  Я знаю
                                                             </MyButton>
                                                         }

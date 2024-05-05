@@ -151,14 +151,15 @@ const Room = () => {
             case 'i_know_delete':
                 setKnowPause(false);
                 setUserAnswer(null);
+                const {paused, play} = document.getElementById('audioPlayer');
                 setRoomData(previousData => {
                     return {
                         ...previousData,
                         scores: result.scores
                     };
                 });
-                if (audio.paused) {
-                    audio.play();
+                if (paused) {
+                    play();
                 }
                 break;
             default:

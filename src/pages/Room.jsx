@@ -162,10 +162,10 @@ const Room = () => {
                 setRoomData(previousData => {
                     return {
                         ...previousData,
-                        scores: result.scores
+                        scores: result.message.scores
                     };
                 });
-                if (result.answer === 'wrong') {
+                if (result.message.answer === 'wrong') {
                     if (audio1.paused) {
                         audio1.play();
                     }

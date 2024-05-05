@@ -246,6 +246,24 @@ const Room = () => {
 
     useEffect(() => {
         const audio = document.getElementById('audioPlayer');
+
+        const handleAudioFinish = () => {
+            setShowAnswer(true);
+        };
+
+        if (audio) {
+            audio.addEventListener('ended', handleAudioFinish);
+        }
+
+        return () => {
+            if (audio) {
+                audio.removeEventListener('ended', handleAudioFinish);
+            }
+        };
+    }, [audioUrl]);
+
+    useEffect(() => {
+        const audio = document.getElementById('audioPlayer');
         if (audio) {
             audio.volume = volume;
             if (audio.muted) {

@@ -82,8 +82,10 @@ const AddPlaylistDialog = ({roomId}) => {
                         </div>
                     }
                     {isLoading && <LinearProgress style={{position: "absolute", bottom: 100, left: 30, width: '88%'}}/>}
-                    <MyButton onClick={addPlaylist}
-                              style={{width: '100%', paddingTop: 15, paddingBottom: 15, marginTop: 60}}>
+                    <MyButton
+                        onClick={addPlaylist}
+                        style={{paddingTop: 15, paddingBottom: 15, marginTop: 60}}
+                    >
                         Добавить плейлист
                     </MyButton>
                 </DialogContent>

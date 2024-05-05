@@ -486,7 +486,7 @@ const Room = () => {
                                                         disableEscapeKeyDown={true}
                                                     >
                                                         <DialogTitle id="alert-dialog-title">
-                                                            Отвечает {userAnswer && userAnswer.username}
+                                                            Отвечает {userAnswer.username? `${userAnswer.username}`: ''}
                                                         </DialogTitle>
                                                         <DialogContent>
                                                             <DialogContentText id="alert-dialog-description">

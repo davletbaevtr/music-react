@@ -6,6 +6,11 @@ import {observer} from "mobx-react-lite";
 import {Context} from "../index";
 import {API_URL, WS_API_URL} from "../utils/consts";
 import AddPlaylistDialog from "../components/UI/AddPlaylistDialog";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import LinearProgress from "@mui/material/LinearProgress";
 
 function SlideTransition(props) {
     return <Slide {...props} direction="up"/>;
@@ -28,6 +33,9 @@ const Room = () => {
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
     const [volume, setVolume] = useState(0);
+
+    const [userAnswer, setUserAnswer] = useState(null);
+    const [knowPause, setKnowPause] = useState(false);
 
     const handleMessage = (event) => {
         const result = JSON.parse(event.data);
@@ -128,6 +136,20 @@ const Room = () => {
                     return {
                         ...previousData,
                         round: result.round
+                    };
+                });
+                break;
+            case 'i_know_create':
+                setKnowPause(true);
+                setUserAnswer(result.message);
+                break;
+            case 'i_know_delete':
+                setKnowPause(false);
+                setUserAnswer(null);
+                setRoomData(previousData => {
+                    return {
+                        ...previousData,
+                        scores: result.scores
                     };
                 });
                 break;
@@ -312,6 +334,13 @@ const Room = () => {
         }
     }
 
+    const handleAnswer = (action) => {
+        if (websocket && websocket.readyState === WebSocket.OPEN) {
+            const message = JSON.stringify({type: 'answer', user_id: store.user_id, action: action});
+            websocket.send(message);
+        }
+    }
+
     return (
         <div
             style={{
@@ -450,53 +479,80 @@ const Room = () => {
                                             )
                                             :
                                             (
-                                                <div style={{
-                                                    display: "flex",
-                                                    flexDirection: "column",
-                                                    justifyContent: "space-between",
-                                                    height: '100%'
-                                                }}>
-                                                    <div>
-                                                        Игра идет<br/> раунд:{roomData.round}
-                                                    </div>
-                                                    {countdown !== 0 && (
-                                                        <div style={{fontSize: 32}}>
-                                                            Воспроизведение начнется через: {countdown} секунд(ы)
-                                                        </div>
-                                                    )}
+                                                <>
+                                                    <Dialog
+                                                        open={knowPause}
+                                                        disableBackdropClick={true}
+                                                        disableEscapeKeyDown={true}
+                                                    >
+                                                        <DialogTitle id="alert-dialog-title">
+                                                            Отвечает {userAnswer.username}
+                                                        </DialogTitle>
+                                                        <DialogContent>
+                                                            <DialogContentText id="alert-dialog-description">
+                                                                здесь полоска отсчета таймера в будущем
+                                                            </DialogContentText>
+                                                            {roomData.seats && roomData.seats[0] === store.user_id &&
+                                                                <div>
+                                                                    <MyButton onClick={() => handleAnswer('right')}>
+                                                                        Правильно
+                                                                    </MyButton>
+                                                                    <MyButton onClick={() => handleAnswer('wrong')}>
+                                                                        Неправильно
+                                                                    </MyButton>
+                                                                </div>
 
+                                                            }
+                                                        </DialogContent>
+                                                    </Dialog>
                                                     <div style={{
-                                                        width: '100%',
-                                                        height: '20px',
-                                                        backgroundColor: '#ddd'
+                                                        display: "flex",
+                                                        flexDirection: "column",
+                                                        justifyContent: "space-between",
+                                                        height: '100%'
                                                     }}>
-                                                        <div style={{
-                                                            height: '100%',
-                                                            backgroundColor: 'blue',
-                                                            width: `${(currentTime / duration) * 100}%`
-                                                        }}/>
-                                                    </div>
-                                                    <div>
-                                                        <label>
-                                                            Громкость:
-                                                            <input
-                                                                type="range"
-                                                                min="0"
-                                                                max="1"
-                                                                step="0.01"
-                                                                value={volume}
-                                                                onChange={(e) => setVolume(parseFloat(e.target.value))}
-                                                                style={{verticalAlign: 'middle'}}
-                                                            />
-                                                        </label>
-                                                    </div>
+                                                        <div>
+                                                            Игра идет<br/> раунд:{roomData.round}
+                                                        </div>
+                                                        {countdown !== 0 && (
+                                                            <div style={{fontSize: 32}}>
+                                                                {countdown} секунд(ы)
+                                                            </div>
+                                                        )}
 
-                                                    {roomData.seats && roomData.seats[0] === store.user_id &&
-                                                        <MyButton onClick={handleNextTrack}>
-                                                            Следующий трек
-                                                        </MyButton>
-                                                    }
-                                                </div>
+                                                        <div style={{
+                                                            width: '100%',
+                                                            height: '20px',
+                                                            backgroundColor: '#ddd'
+                                                        }}>
+                                                            <div style={{
+                                                                height: '100%',
+                                                                backgroundColor: 'blue',
+                                                                width: `${(currentTime / duration) * 100}%`
+                                                            }}/>
+                                                        </div>
+                                                        <div>
+                                                            <label>
+                                                                Громкость:
+                                                                <input
+                                                                    type="range"
+                                                                    min="0"
+                                                                    max="1"
+                                                                    step="0.01"
+                                                                    value={volume}
+                                                                    onChange={(e) => setVolume(parseFloat(e.target.value))}
+                                                                    style={{verticalAlign: 'middle'}}
+                                                                />
+                                                            </label>
+                                                        </div>
+
+                                                        {roomData.seats && roomData.seats[0] === store.user_id &&
+                                                            <MyButton onClick={handleNextTrack}>
+                                                                Следующий трек
+                                                            </MyButton>
+                                                        }
+                                                    </div>
+                                                </>
                                             )
                                         }
                                     </div>

@@ -10,6 +10,7 @@ const MyButton = styled.button`
     font-size: 20px;
     font-weight: 800;
     background-color: #B334E6;
+    padding: 10px;
 `;
 
 export default MyButton;

@@ -38,9 +38,11 @@ const Room = () => {
     const [knowPause, setKnowPause] = useState(false);
     const [iKnowisClickable, setIKnowIsClickable] = useState(true);
 
+    const [audioTitle, setAudioTitle] = useState('');
+    const [audioArtists, setAudioArtists] = useState('');
+
     const handleMessage = (event) => {
         const result = JSON.parse(event.data);
-        console.log(result);
         switch (result.type) {
             case 'initial_room':
                 setRoomData(result.room_data);
@@ -130,7 +132,9 @@ const Room = () => {
                 });
                 break;
             case 'music_url_update':
-                setAudioUrl(result.url);
+                setAudioUrl(result.message.url);
+                setAudioTitle(result.message.title)
+                setAudioArtists(result.message.artists)
                 break;
             case 'round_update':
                 setRoomData(previousData => {
@@ -510,7 +514,7 @@ const Room = () => {
                                                         disableEscapeKeyDown={true}
                                                     >
                                                         <DialogTitle id="alert-dialog-title">
-                                                            Отвечает {userAnswer? `${userAnswer.username}`: ''}
+                                                            Отвечает {userAnswer ? `${userAnswer.username}` : ''}
                                                         </DialogTitle>
                                                         <DialogContent>
                                                             <DialogContentText id="alert-dialog-description">
@@ -518,6 +522,15 @@ const Room = () => {
                                                             </DialogContentText>
                                                             {roomData.seats && roomData.seats[0] === store.user_id &&
                                                                 <div>
+                                                                    <div style={{fontSize: 20}}>
+                                                                        title: {audioTitle}
+                                                                    </div>
+                                                                    <div style={{fontSize: 20}}>
+                                                                        artists:
+                                                                        {audioArtists.map((name) => (
+                                                                            `${name}, `
+                                                                        ))}
+                                                                    </div>
                                                                     <MyButton onClick={() => handleAnswer('right')}>
                                                                         Правильно
                                                                     </MyButton>
@@ -525,7 +538,6 @@ const Room = () => {
                                                                         Неправильно
                                                                     </MyButton>
                                                                 </div>
-
                                                             }
                                                         </DialogContent>
                                                     </Dialog>
@@ -576,8 +588,9 @@ const Room = () => {
                                                             </MyButton>
                                                         }
                                                         {roomData.seats && roomData.seats.slice(1).includes(store.user_id) &&
-                                                            <MyButton onClick={handleIKnow} disabled={!iKnowisClickable}>
-                                                                 Я знаю
+                                                            <MyButton onClick={handleIKnow}
+                                                                      disabled={!iKnowisClickable}>
+                                                                Я знаю
                                                             </MyButton>
                                                         }
                                                     </div>

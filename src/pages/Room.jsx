@@ -536,7 +536,7 @@ const Room = () => {
                                                                     <div style={{fontSize: 20}}>
                                                                         artists:
                                                                         {audioArtists.map((name) => (
-                                                                            `${name}, `
+                                                                            ` ${name}, `
                                                                         ))}
                                                                     </div>
                                                                     <MyButton onClick={() => handleAnswer('right')}>

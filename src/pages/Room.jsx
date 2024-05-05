@@ -198,7 +198,7 @@ const Room = () => {
                 audio.load();
                 setTimeout(() => {
                     audio.play().catch(error => console.log("Ошибка воспроизведения:", error));
-                    setKnowButtonHidden(false);
+                    setKnowButtonVisible(true);
                 }, 3000);
 
                 audio.onerror = () => {

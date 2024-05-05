@@ -39,7 +39,7 @@ const Room = () => {
     const [iKnowisClickable, setIKnowIsClickable] = useState(true);
 
     const [audioTitle, setAudioTitle] = useState('');
-    const [audioArtists, setAudioArtists] = useState('');
+    const [audioArtists, setAudioArtists] = useState([]);
 
     const handleMessage = (event) => {
         const result = JSON.parse(event.data);

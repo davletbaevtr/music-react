@@ -199,6 +199,17 @@ const Room = () => {
     useEffect(() => {
         const audio = document.getElementById('audioPlayer');
 
+        if (knowPause && !audio.paused) {
+            audio.pause();
+        }
+        if (!knowPause && audio.paused) {
+            audio.play()
+        }
+    }, [knowPause]);
+
+    useEffect(() => {
+        const audio = document.getElementById('audioPlayer');
+
         const setAudioData = () => {
             setDuration(audio.duration);
         };

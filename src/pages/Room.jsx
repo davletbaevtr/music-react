@@ -137,7 +137,6 @@ const Room = () => {
                 setAudioUrl(result.message.url);
                 setAudioTitle(result.message.title)
                 setAudioArtists(result.message.artists)
-                setKnowButtonHidden(false);
                 break;
             case 'round_update':
                 setRoomData(previousData => {
@@ -199,6 +198,7 @@ const Room = () => {
                 audio.load();
                 setTimeout(() => {
                     audio.play().catch(error => console.log("Ошибка воспроизведения:", error));
+                    setKnowButtonHidden(false);
                 }, 3000);
 
                 audio.onerror = () => {

@@ -625,20 +625,19 @@ const Room = () => {
                                                                         />
                                                                     </label>
                                                                 </div>
+                                                                {roomData.seats && roomData.seats.slice(1).includes(store.user_id) && knowButtonVisible &&
+                                                                    <MyButton
+                                                                        onClick={handleIKnow}
+                                                                        disabled={!iKnowisClickable}
+                                                                    >
+                                                                        Я знаю
+                                                                    </MyButton>
+                                                                }
                                                             </>
                                                         }
-
                                                         {roomData.seats && roomData.seats[0] === store.user_id &&
                                                             <MyButton onClick={handleNextTrack}>
                                                                 Следующий трек
-                                                            </MyButton>
-                                                        }
-                                                        {roomData.seats && roomData.seats.slice(1).includes(store.user_id) && knowButtonVisible &&
-                                                            <MyButton
-                                                                onClick={handleIKnow}
-                                                                disabled={!iKnowisClickable}
-                                                            >
-                                                                Я знаю
                                                             </MyButton>
                                                         }
                                                     </div>

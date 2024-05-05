@@ -41,6 +41,8 @@ const Room = () => {
     const [audioTitle, setAudioTitle] = useState('');
     const [audioArtists, setAudioArtists] = useState([]);
 
+    const [knowButtonHidden, setKnowButtonHidden] = useState(true);
+
     const handleMessage = (event) => {
         const result = JSON.parse(event.data);
         switch (result.type) {
@@ -135,6 +137,7 @@ const Room = () => {
                 setAudioUrl(result.message.url);
                 setAudioTitle(result.message.title)
                 setAudioArtists(result.message.artists)
+                setKnowButtonHidden(false);
                 break;
             case 'round_update':
                 setRoomData(previousData => {
@@ -162,8 +165,12 @@ const Room = () => {
                         scores: result.scores
                     };
                 });
-                if (audio1.paused) {
-                    audio1.play();
+                if (result.answer === 'wrong') {
+                    if (audio1.paused) {
+                        audio1.play();
+                    }
+                } else {
+                    setKnowButtonHidden(true);
                 }
                 break;
             default:
@@ -588,8 +595,11 @@ const Room = () => {
                                                             </MyButton>
                                                         }
                                                         {roomData.seats && roomData.seats.slice(1).includes(store.user_id) &&
-                                                            <MyButton onClick={handleIKnow}
-                                                                      disabled={!iKnowisClickable}>
+                                                            <MyButton
+                                                                onClick={handleIKnow}
+                                                                disabled={!iKnowisClickable}
+                                                                hidden={knowButtonHidden}
+                                                            >
                                                                 Я знаю
                                                             </MyButton>
                                                         }

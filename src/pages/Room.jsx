@@ -341,6 +341,13 @@ const Room = () => {
         }
     }
 
+    const handleIKnow = () => {
+        if (websocket && websocket.readyState === WebSocket.OPEN) {
+            const message = JSON.stringify({type: 'i_know', user_id: store.user_id});
+            websocket.send(message);
+        }
+    }
+
     return (
         <div
             style={{
@@ -486,7 +493,7 @@ const Room = () => {
                                                         disableEscapeKeyDown={true}
                                                     >
                                                         <DialogTitle id="alert-dialog-title">
-                                                            Отвечает {userAnswer.username? `${userAnswer.username}`: ''}
+                                                            Отвечает {userAnswer? `${userAnswer.username}`: ''}
                                                         </DialogTitle>
                                                         <DialogContent>
                                                             <DialogContentText id="alert-dialog-description">
@@ -549,6 +556,11 @@ const Room = () => {
                                                         {roomData.seats && roomData.seats[0] === store.user_id &&
                                                             <MyButton onClick={handleNextTrack}>
                                                                 Следующий трек
+                                                            </MyButton>
+                                                        }
+                                                        {roomData.seats && roomData.seats.slice(1).includes(store.user_id) &&
+                                                            <MyButton onClick={handleIKnow}>
+                                                                 Я знаю
                                                             </MyButton>
                                                         }
                                                     </div>

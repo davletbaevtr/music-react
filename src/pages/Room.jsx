@@ -771,6 +771,21 @@ const Room = () => {
                                                                         }}/>
                                                                     </div>
                                                                 }
+                                                                {roomData.seats && roomData.seats[0] === store.user_id &&
+                                                                    <div>
+                                                                        <img src={`https://${audioImg}30x30`}
+                                                                             alt='audio img'/>
+                                                                        <div style={{fontSize: 20}}>
+                                                                            title: {audioTitle}
+                                                                        </div>
+                                                                        <div style={{fontSize: 20}}>
+                                                                            artists:
+                                                                            {audioArtists.map((name) => (
+                                                                                ` ${name}, `
+                                                                            ))}
+                                                                        </div>
+                                                                    </div>
+                                                                }
                                                                 <div>
 
                                                                     <label className="slider">

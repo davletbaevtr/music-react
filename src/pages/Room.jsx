@@ -795,7 +795,7 @@ const Room = () => {
                                                                                max="0.5"
                                                                                step="0.005"
                                                                                onChange={(e) => {
-                                                                                   if (volume > 0.06) {
+                                                                                   if (e.target.value > 0.01) {
                                                                                        setVolume(parseFloat(e.target.value))
                                                                                    } else {
                                                                                        setVolume(0)

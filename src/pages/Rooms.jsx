@@ -242,7 +242,7 @@ const Rooms = () => {
                             <div style={{marginTop: 10}} id="roundsValue">Количество раундов: {maxRounds}</div>
                         </div>
                         <div className="rounds-slider-container">
-                            <input type="range" min="1" max="10" value={playersCount} className="range-slider"
+                            <input type="range" min="1" max="8" value={playersCount} className="range-slider"
                                    id="playersCountRange" onChange={handlePlayersCountChange}/>
                             <div style={{marginTop: 10}} id="playersCountValue">Количество игроков: {playersCount}</div>
                         </div>

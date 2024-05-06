@@ -42,7 +42,7 @@ const AddPlaylistDialog = ({roomId}) => {
 
     return (
         <>
-            <MyButton onClick={handleClickOpen}>
+            <MyButton onClick={handleClickOpen} style={{width: 300}}>
                 Добавить плейлист
             </MyButton>
             <Dialog

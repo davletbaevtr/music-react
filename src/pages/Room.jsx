@@ -719,13 +719,15 @@ const Room = () => {
 
                                                         {showAnswer ?
                                                             <div style={{display: "flex"}}>
-                                                                <img
-                                                                    src={`https://${audioImg}300x300`}
-                                                                    alt='audio img'
-                                                                    width={300}
-                                                                    height={300}
-                                                                    style={{borderRadius: 10}}
-                                                                />
+                                                                {audioImg &&
+                                                                    <img
+                                                                        src={`https://${audioImg}300x300`}
+                                                                        alt='audio img'
+                                                                        width={300}
+                                                                        height={300}
+                                                                        style={{borderRadius: 10}}
+                                                                    />
+                                                                }
                                                                 <div>
                                                                     <div style={{fontSize: 20}}>
                                                                         {audioTitle}

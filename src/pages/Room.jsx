@@ -793,7 +793,7 @@ const Room = () => {
                                                                                className="level"
                                                                                value={volume}
                                                                                min="0"
-                                                                               max="0,5"
+                                                                               max="0.5"
                                                                                step="0.005"
                                                                                onChange={(e) => setVolume(parseFloat(e.target.value))}
                                                                         />

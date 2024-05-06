@@ -36,7 +36,6 @@ const Room = () => {
     const [duration, setDuration] = useState(0);
     const [volume, setVolume] = useState(0);
 
-    const [userAnswer, setUserAnswer] = useState(null);
     const [iKnowisClickable, setIKnowIsClickable] = useState(true);
 
     const [audioTitle, setAudioTitle] = useState('');
@@ -795,7 +794,13 @@ const Room = () => {
                                                                                min="0"
                                                                                max="0.5"
                                                                                step="0.005"
-                                                                               onChange={(e) => setVolume(parseFloat(e.target.value))}
+                                                                               onChange={(e) => {
+                                                                                   if (volume > 0.06) {
+                                                                                       setVolume(parseFloat(e.target.value))
+                                                                                   } else {
+                                                                                       setVolume(0)
+                                                                                   }
+                                                                               }}
                                                                         />
                                                                         <div onClick={handleVolumeToggle}>
                                                                             {volume === 0 ?

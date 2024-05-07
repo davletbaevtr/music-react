@@ -227,7 +227,7 @@ const Rooms = () => {
                             fullWidth
                             value={roomPassword}
                             onChange={e => setRoomPassword(e.target.value)}
-                            type="password"
+                            type="new-password"
                             autoComplete="off"
                             sx={{
                                 '& .MuiOutlinedInput-root': {

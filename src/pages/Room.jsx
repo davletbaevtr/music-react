@@ -812,7 +812,6 @@ const Room = () => {
                                                                         </div>
                                                                     }
                                                                     <div>
-
                                                                         <label className="slider">
                                                                             <input type="range"
                                                                                    className="level"

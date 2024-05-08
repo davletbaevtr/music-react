@@ -70,7 +70,8 @@ const MyAppBar = () => {
             height: 70,
             justifyContent: "space-around",
             borderBottom: '1px solid rgba(235, 235, 235, 1)',
-            width: "100%"
+            width: "100%",
+            position: 'relative'
         }}>
             <div style={{display: "flex"}}>
                 <img style={{marginRight: 30}} src={logo} alt={'logo'} width={70}
@@ -114,6 +115,9 @@ const MyAppBar = () => {
                     </div>
                     // здесь еще картинка и нажимаешь она меняется на вариант из бекнда
                 }
+            </div>
+            <div style={{position: "absolute", left: 15, top: 25}}>
+                beta-test1.0
             </div>
         </div>
     );

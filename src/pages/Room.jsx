@@ -492,7 +492,8 @@ const Room = () => {
                                         marginLeft: 30,
                                         width: 170,
                                         marginRight: 30,
-                                        minWidth: 170
+                                        minWidth: 170,
+                                        cursor: roomData.seats[0] == null ? "pointer" : 'default'
                                     }}
                                     key={0}
                                     onClick={
@@ -694,8 +695,15 @@ const Room = () => {
                                                                 </DialogContentText>
                                                                 {roomData.seats && roomData.seats[0] === store.user_id &&
                                                                     <div>
-                                                                        <img src={`https://${audioImg}30x30`}
-                                                                             alt='audio img'/>
+                                                                        {audioImg &&
+                                                                            <img
+                                                                                src={`https://${audioImg}30x30`}
+                                                                                alt='audio img'
+                                                                                width={30}
+                                                                                height={30}
+                                                                                style={{borderRadius: 5}}
+                                                                            />
+                                                                        }
                                                                         <div style={{fontSize: 20}}>
                                                                             title: {audioTitle}
                                                                         </div>
@@ -772,8 +780,15 @@ const Room = () => {
                                                                 }
                                                                 {roomData.seats && roomData.seats[0] === store.user_id &&
                                                                     <div>
-                                                                        <img src={`https://${audioImg}30x30`}
-                                                                             alt='audio img'/>
+                                                                        {audioImg &&
+                                                                            <img
+                                                                                src={`https://${audioImg}300x300`}
+                                                                                alt='audio img'
+                                                                                width={300}
+                                                                                height={300}
+                                                                                style={{borderRadius: 10}}
+                                                                            />
+                                                                        }
                                                                         <div style={{fontSize: 20}}>
                                                                             title: {audioTitle}
                                                                         </div>
@@ -877,6 +892,7 @@ const Room = () => {
                                             width: 170,
                                             borderRadius: 30,
                                             marginRight: 20,
+                                            cursor: roomData.seats[index + 1] == null ? "pointer" : 'default'
                                         }}
                                         key={index + 1}
                                         onClick={

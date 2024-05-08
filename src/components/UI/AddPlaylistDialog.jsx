@@ -20,7 +20,7 @@ const AddPlaylistDialog = ({roomId}) => {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        setPlaylistName(`Плейлист от ${store.username}`)
+        setPlaylistName(`Плейлист от ${store.username}`);
     }, [store.username]);
 
     const handleClickOpen = () => {
@@ -28,7 +28,10 @@ const AddPlaylistDialog = ({roomId}) => {
     };
 
     const handleClose = () => {
+        setError(false);
+        setUrl('');
         setOpen(false);
+        setIsLoading(false);
     };
 
     const addPlaylist = async () => {

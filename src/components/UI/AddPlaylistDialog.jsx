@@ -15,7 +15,7 @@ const AddPlaylistDialog = ({roomId}) => {
     const {store} = useContext(Context);
     const [open, setOpen] = useState(false);
     const [url, setUrl] = useState('');
-    const [playlistName, setPlaylistName] = useState(`Плейлист от ${store.username}`);
+    const [playlistName, setPlaylistName] = useState(``);
     const [error, setError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -28,15 +28,17 @@ const AddPlaylistDialog = ({roomId}) => {
     };
 
     const addPlaylist = async () => {
-        try {
-            setError(false);
-            setIsLoading(true);
-            await axios.post(`${API_URL}/api/add_playlist/`, {name: playlistName, url: url, room_id: roomId});
-            handleClose();
-        } catch (error) {
-            setError(true);
-        } finally {
-            setIsLoading(false);
+        if (playlistName.length > 0) {
+            try {
+                setError(false);
+                setIsLoading(true);
+                await axios.post(`${API_URL}/api/add_playlist/`, {name: playlistName, url: url, room_id: roomId});
+                handleClose();
+            } catch (error) {
+                setError(true);
+            } finally {
+                setIsLoading(false);
+            }
         }
     }
 
@@ -66,6 +68,7 @@ const AddPlaylistDialog = ({roomId}) => {
                         type="text"
                         autoComplete="off"
                         sx={{marginTop: 2}}
+                        required
                     />
                     <TextField
                         label="Вставьте ссылку"

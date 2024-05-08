@@ -440,6 +440,13 @@ const Room = () => {
         }
     };
 
+    const handleStartOver = () => {
+        if (websocket && websocket.readyState === WebSocket.OPEN) {
+            const message = JSON.stringify({type: 'start_over', user_id: store.user_id});
+            websocket.send(message);
+        }
+    }
+
     return (
         <div
             style={{
@@ -864,17 +871,31 @@ const Room = () => {
                                                     </>
                                                 )
                                                 :
-                                                <>
+
+                                                <div style={{
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    height: '100%',
+                                                    alignItems: "center",
+                                                    justifyContent: "center",
+                                                    fontSize: 40,
+                                                    textAlign: "center",
+                                                    fontWeight: 600
+                                                }}>
                                                     <div>
                                                         Игра закончилась
                                                     </div>
-                                                    <div>
+                                                    <div style={{marginBottom: 15}}>
                                                         ScoreBoard soon...
                                                     </div>
-                                                    <MyButton>
-                                                        Начать заново
-                                                    </MyButton>
-                                                </>
+                                                    {roomData.seats[0] === store.user_id &&
+                                                        <MyButton onClick={handleStartOver}>
+                                                            Начать заново
+                                                        </MyButton>
+                                                    }
+                                                    <span style={{marginBottom: 10}}></span>
+                                                </div>
+
                                         }
                                     </div>
                                 </div>

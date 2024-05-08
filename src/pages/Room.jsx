@@ -789,7 +789,7 @@ const Room = () => {
                                                                         </div>
                                                                     }
                                                                     {roomData.seats && roomData.seats[0] === store.user_id &&
-                                                                        <div>
+                                                                        <div style={{display: "flex"}}>
                                                                             {audioImg &&
                                                                                 <img
                                                                                     src={`https://${audioImg}300x300`}
@@ -799,14 +799,15 @@ const Room = () => {
                                                                                     style={{borderRadius: 10}}
                                                                                 />
                                                                             }
-                                                                            <div style={{fontSize: 20}}>
-                                                                                title: {audioTitle}
-                                                                            </div>
-                                                                            <div style={{fontSize: 20}}>
-                                                                                artists:
-                                                                                {audioArtists.map((name) => (
-                                                                                    ` ${name}, `
-                                                                                ))}
+                                                                            <div>
+                                                                                <div style={{fontSize: 20}}>
+                                                                                    {audioTitle}
+                                                                                </div>
+                                                                                <div style={{fontSize: 16}}>
+                                                                                    {audioArtists.map((name) => (
+                                                                                        ` ${name}, `
+                                                                                    ))}
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                     }

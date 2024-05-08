@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Dialog from '@mui/material/Dialog';
 import LinearProgress from '@mui/material/LinearProgress';
 import DialogContent from '@mui/material/DialogContent';
@@ -9,13 +9,19 @@ import {TextField} from "@mui/material";
 import {observer} from "mobx-react-lite";
 import axios from "axios";
 import {API_URL} from "../../utils/consts";
+import {Context} from "../../index";
 
 const AddPlaylistDialog = ({roomId}) => {
+    const {store} = useContext(Context);
     const [open, setOpen] = useState(false);
     const [url, setUrl] = useState('');
-    const [playlistName, setPlaylistName] = useState(``);
+    const [playlistName, setPlaylistName] = useState('');
     const [error, setError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        setPlaylistName(`Плейлист от ${store.username}`)
+    }, [store.username]);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -132,9 +138,6 @@ const AddPlaylistDialog = ({roomId}) => {
                         Добавить плейлист
                     </MyButton>
                 </DialogContent>
-                {/*<DialogActions>*/}
-                {/*    <Button onClick={handleClose}>Отменить</Button>*/}
-                {/*</DialogActions>*/}
             </Dialog>
         </>
     );

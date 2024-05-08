@@ -678,188 +678,203 @@ const Room = () => {
                                                     </div>
                                             )
                                             :
-                                            (
-                                                <>
-                                                    {roomData && roomData.seats.includes(store.user_id) &&
-                                                        <Dialog
-                                                            open={roomData.i_know_pause}
-                                                            disableBackdropClick={true}
-                                                            disableEscapeKeyDown={true}
-                                                        >
-                                                            <DialogTitle id="alert-dialog-title">
-                                                                Отвечает {roomData.i_know_pause ? `${roomData.i_know_pause.username}` : ''}
-                                                            </DialogTitle>
-                                                            <DialogContent>
-                                                                <DialogContentText id="alert-dialog-description">
-                                                                    здесь полоска отсчета таймера в будущем
-                                                                </DialogContentText>
-                                                                {roomData.seats && roomData.seats[0] === store.user_id &&
-                                                                    <div>
-                                                                        {audioImg &&
-                                                                            <img
-                                                                                src={`https://${audioImg}30x30`}
-                                                                                alt='audio img'
-                                                                                width={30}
-                                                                                height={30}
-                                                                                style={{borderRadius: 5}}
-                                                                            />
-                                                                        }
-                                                                        <div style={{fontSize: 20}}>
-                                                                            title: {audioTitle}
-                                                                        </div>
-                                                                        <div style={{fontSize: 20}}>
-                                                                            artists:
-                                                                            {audioArtists.map((name) => (
-                                                                                ` ${name}, `
-                                                                            ))}
-                                                                        </div>
-                                                                        <MyButton onClick={() => handleAnswer('right')}>
-                                                                            Правильно
-                                                                        </MyButton>
-                                                                        <MyButton onClick={() => handleAnswer('wrong')}>
-                                                                            Неправильно
-                                                                        </MyButton>
-                                                                    </div>
-                                                                }
-                                                            </DialogContent>
-                                                        </Dialog>
-                                                    }
-                                                    <div style={{
-                                                        display: "flex",
-                                                        flexDirection: "column",
-                                                        justifyContent: "space-between",
-                                                        height: '100%'
-                                                    }}>
-                                                        <div>
-                                                            Игра идет<br/> раунд:{roomData.round}
-                                                        </div>
-                                                        {countdown !== 0 && (
-                                                            <div style={{fontSize: 32}}>
-                                                                {countdown} секунд(ы)
-                                                            </div>
-                                                        )}
-
-                                                        {showAnswer ?
-                                                            <div style={{display: "flex"}}>
-                                                                {audioImg &&
-                                                                    <img
-                                                                        src={`https://${audioImg}300x300`}
-                                                                        alt='audio img'
-                                                                        width={300}
-                                                                        height={300}
-                                                                        style={{borderRadius: 10}}
-                                                                    />
-                                                                }
-                                                                <div>
-                                                                    <div style={{fontSize: 20}}>
-                                                                        {audioTitle}
-                                                                    </div>
-                                                                    <div style={{fontSize: 16}}>
-                                                                        {audioArtists.map((name) => (
-                                                                            ` ${name}, `
-                                                                        ))}
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            :
-                                                            <>
-                                                                {duration === 0 ?
-                                                                    <div style={{height: 15}}></div>
-                                                                    :
-                                                                    <div style={{
-                                                                        width: '100%',
-                                                                        height: 15,
-                                                                        backgroundColor: '#ddd'
-                                                                    }}>
-                                                                        <div style={{
-                                                                            height: '100%',
-                                                                            backgroundColor: 'blue',
-                                                                            width: `${(currentTime / duration) * 100}%`
-                                                                        }}/>
-                                                                    </div>
-                                                                }
-                                                                {roomData.seats && roomData.seats[0] === store.user_id &&
-                                                                    <div>
-                                                                        {audioImg &&
-                                                                            <img
-                                                                                src={`https://${audioImg}300x300`}
-                                                                                alt='audio img'
-                                                                                width={300}
-                                                                                height={300}
-                                                                                style={{borderRadius: 10}}
-                                                                            />
-                                                                        }
-                                                                        <div style={{fontSize: 20}}>
-                                                                            title: {audioTitle}
-                                                                        </div>
-                                                                        <div style={{fontSize: 20}}>
-                                                                            artists:
-                                                                            {audioArtists.map((name) => (
-                                                                                ` ${name}, `
-                                                                            ))}
-                                                                        </div>
-                                                                    </div>
-                                                                }
-                                                                <div>
-
-                                                                    <label className="slider">
-                                                                        <input type="range"
-                                                                               className="level"
-                                                                               value={volume}
-                                                                               min="0"
-                                                                               max="0.5"
-                                                                               step="0.005"
-                                                                               onChange={(e) => {
-                                                                                   if (e.target.value > 0.01) {
-                                                                                       setVolume(parseFloat(e.target.value))
-                                                                                   } else {
-                                                                                       setVolume(0)
-                                                                                   }
-                                                                               }}
-                                                                        />
-                                                                        <div onClick={handleVolumeToggle}>
-                                                                            {volume === 0 ?
-                                                                                <svg
-                                                                                    viewBox="0 0 576 512"
-                                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                                    height="50"
-                                                                                    className="volume">
-                                                                                    <path
-                                                                                        d="M301.1 34.8C312.6 40 320 51.4 320 64V448c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352H64c-35.3 0-64-28.7-64-64V224c0-35.3 28.7-64 64-64h67.8L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3zM425 167l55 55 55-55c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-55 55 55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-55-55-55 55c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l55-55-55-55c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0z"></path>
-                                                                                </svg>
-                                                                                :
-                                                                                <svg
-                                                                                    viewBox="0 0 448 512"
-                                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                                    className="volume"
-                                                                                    height="50"
-                                                                                    style={{marginRight: 20}}
-                                                                                >
-                                                                                    <path
-                                                                                        d="M301.1 34.8C312.6 40 320 51.4 320 64V448c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352H64c-35.3 0-64-28.7-64-64V224c0-35.3 28.7-64 64-64h67.8L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3zM412.6 181.5C434.1 199.1 448 225.9 448 256s-13.9 56.9-35.4 74.5c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C393.1 284.4 400 271 400 256s-6.9-28.4-17.7-37.3c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5z"></path>
-                                                                                </svg>
+                                            roomData.round <= roomData.max_rounds ?
+                                                (
+                                                    <>
+                                                        {roomData && roomData.seats.includes(store.user_id) &&
+                                                            <Dialog
+                                                                open={roomData.i_know_pause}
+                                                                disableBackdropClick={true}
+                                                                disableEscapeKeyDown={true}
+                                                            >
+                                                                <DialogTitle id="alert-dialog-title">
+                                                                    Отвечает {roomData.i_know_pause ? `${roomData.i_know_pause.username}` : ''}
+                                                                </DialogTitle>
+                                                                <DialogContent>
+                                                                    <DialogContentText id="alert-dialog-description">
+                                                                        здесь полоска отсчета таймера в будущем
+                                                                    </DialogContentText>
+                                                                    {roomData.seats && roomData.seats[0] === store.user_id &&
+                                                                        <div>
+                                                                            {audioImg &&
+                                                                                <img
+                                                                                    src={`https://${audioImg}30x30`}
+                                                                                    alt='audio img'
+                                                                                    width={30}
+                                                                                    height={30}
+                                                                                    style={{borderRadius: 5}}
+                                                                                />
                                                                             }
+                                                                            <div style={{fontSize: 20}}>
+                                                                                title: {audioTitle}
+                                                                            </div>
+                                                                            <div style={{fontSize: 20}}>
+                                                                                artists:
+                                                                                {audioArtists.map((name) => (
+                                                                                    ` ${name}, `
+                                                                                ))}
+                                                                            </div>
+                                                                            <MyButton
+                                                                                onClick={() => handleAnswer('right')}>
+                                                                                Правильно
+                                                                            </MyButton>
+                                                                            <MyButton
+                                                                                onClick={() => handleAnswer('wrong')}>
+                                                                                Неправильно
+                                                                            </MyButton>
                                                                         </div>
-                                                                    </label>
+                                                                    }
+                                                                </DialogContent>
+                                                            </Dialog>
+                                                        }
+                                                        <div style={{
+                                                            display: "flex",
+                                                            flexDirection: "column",
+                                                            justifyContent: "space-between",
+                                                            height: '100%'
+                                                        }}>
+                                                            <div>
+                                                                Игра идет<br/> раунд:{roomData.round}
+                                                            </div>
+                                                            {countdown !== 0 && (
+                                                                <div style={{fontSize: 32}}>
+                                                                    {countdown} секунд(ы)
                                                                 </div>
-                                                                {roomData.seats && roomData.seats.slice(1).includes(store.user_id) && knowButtonVisible &&
-                                                                    <MyButton
-                                                                        id='i_know'
-                                                                        onClick={handleIKnow}
-                                                                    >
-                                                                        Я знаю
-                                                                    </MyButton>
-                                                                }
-                                                            </>
-                                                        }
-                                                        {roomData.seats && roomData.seats[0] === store.user_id &&
-                                                            <MyButton onClick={handleNextTrack}>
-                                                                Следующий трек
-                                                            </MyButton>
-                                                        }
+                                                            )}
+
+                                                            {showAnswer ?
+                                                                <div style={{display: "flex"}}>
+                                                                    {audioImg &&
+                                                                        <img
+                                                                            src={`https://${audioImg}300x300`}
+                                                                            alt='audio img'
+                                                                            width={300}
+                                                                            height={300}
+                                                                            style={{borderRadius: 10}}
+                                                                        />
+                                                                    }
+                                                                    <div>
+                                                                        <div style={{fontSize: 20}}>
+                                                                            {audioTitle}
+                                                                        </div>
+                                                                        <div style={{fontSize: 16}}>
+                                                                            {audioArtists.map((name) => (
+                                                                                ` ${name}, `
+                                                                            ))}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                :
+                                                                <>
+                                                                    {duration === 0 ?
+                                                                        <div style={{height: 15}}></div>
+                                                                        :
+                                                                        <div style={{
+                                                                            width: '100%',
+                                                                            height: 15,
+                                                                            backgroundColor: '#ddd'
+                                                                        }}>
+                                                                            <div style={{
+                                                                                height: '100%',
+                                                                                backgroundColor: 'blue',
+                                                                                width: `${(currentTime / duration) * 100}%`
+                                                                            }}/>
+                                                                        </div>
+                                                                    }
+                                                                    {roomData.seats && roomData.seats[0] === store.user_id &&
+                                                                        <div>
+                                                                            {audioImg &&
+                                                                                <img
+                                                                                    src={`https://${audioImg}300x300`}
+                                                                                    alt='audio img'
+                                                                                    width={300}
+                                                                                    height={300}
+                                                                                    style={{borderRadius: 10}}
+                                                                                />
+                                                                            }
+                                                                            <div style={{fontSize: 20}}>
+                                                                                title: {audioTitle}
+                                                                            </div>
+                                                                            <div style={{fontSize: 20}}>
+                                                                                artists:
+                                                                                {audioArtists.map((name) => (
+                                                                                    ` ${name}, `
+                                                                                ))}
+                                                                            </div>
+                                                                        </div>
+                                                                    }
+                                                                    <div>
+
+                                                                        <label className="slider">
+                                                                            <input type="range"
+                                                                                   className="level"
+                                                                                   value={volume}
+                                                                                   min="0"
+                                                                                   max="0.5"
+                                                                                   step="0.005"
+                                                                                   onChange={(e) => {
+                                                                                       if (e.target.value > 0.01) {
+                                                                                           setVolume(parseFloat(e.target.value))
+                                                                                       } else {
+                                                                                           setVolume(0)
+                                                                                       }
+                                                                                   }}
+                                                                            />
+                                                                            <div onClick={handleVolumeToggle}>
+                                                                                {volume === 0 ?
+                                                                                    <svg
+                                                                                        viewBox="0 0 576 512"
+                                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                                        height="50"
+                                                                                        className="volume">
+                                                                                        <path
+                                                                                            d="M301.1 34.8C312.6 40 320 51.4 320 64V448c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352H64c-35.3 0-64-28.7-64-64V224c0-35.3 28.7-64 64-64h67.8L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3zM425 167l55 55 55-55c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-55 55 55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-55-55-55 55c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l55-55-55-55c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0z"></path>
+                                                                                    </svg>
+                                                                                    :
+                                                                                    <svg
+                                                                                        viewBox="0 0 448 512"
+                                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                                        className="volume"
+                                                                                        height="50"
+                                                                                        style={{marginRight: 20}}
+                                                                                    >
+                                                                                        <path
+                                                                                            d="M301.1 34.8C312.6 40 320 51.4 320 64V448c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352H64c-35.3 0-64-28.7-64-64V224c0-35.3 28.7-64 64-64h67.8L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3zM412.6 181.5C434.1 199.1 448 225.9 448 256s-13.9 56.9-35.4 74.5c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C393.1 284.4 400 271 400 256s-6.9-28.4-17.7-37.3c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5z"></path>
+                                                                                    </svg>
+                                                                                }
+                                                                            </div>
+                                                                        </label>
+                                                                    </div>
+                                                                    {roomData.seats && roomData.seats.slice(1).includes(store.user_id) && knowButtonVisible &&
+                                                                        <MyButton
+                                                                            id='i_know'
+                                                                            onClick={handleIKnow}
+                                                                        >
+                                                                            Я знаю
+                                                                        </MyButton>
+                                                                    }
+                                                                </>
+                                                            }
+                                                            {roomData.seats && roomData.seats[0] === store.user_id &&
+                                                                <MyButton onClick={handleNextTrack}>
+                                                                    Следующий трек
+                                                                </MyButton>
+                                                            }
+                                                        </div>
+                                                    </>
+                                                )
+                                                :
+                                                <>
+                                                    <div>
+                                                        Игра закончилась
                                                     </div>
+                                                    <div>
+                                                        ScoreBoard soon...
+                                                    </div>
+                                                    <MyButton>
+                                                        Начать заново
+                                                    </MyButton>
                                                 </>
-                                            )
                                         }
                                     </div>
                                 </div>

@@ -10,11 +10,13 @@ import {observer} from "mobx-react-lite";
 import axios from "axios";
 import {API_URL} from "../../utils/consts";
 import {Context} from "../../index";
+import Plus from '../../assets/plus.svg'
+import Remove from '../../assets/remove.svg'
 
 const AddPlaylistDialog = ({roomId}) => {
     const {store} = useContext(Context);
     const [open, setOpen] = useState(false);
-    const [url, setUrl] = useState('');
+    const [urls, setUrls] = useState(['']);
     const [playlistName, setPlaylistName] = useState('');
     const [error, setError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -29,7 +31,7 @@ const AddPlaylistDialog = ({roomId}) => {
 
     const handleClose = () => {
         setError(false);
-        setUrl('');
+        setUrls(['']);
         setOpen(false);
         setIsLoading(false);
     };
@@ -39,7 +41,7 @@ const AddPlaylistDialog = ({roomId}) => {
             try {
                 setError(false);
                 setIsLoading(true);
-                await axios.post(`${API_URL}/api/add_playlist/`, {name: playlistName, url: url, room_id: roomId});
+                await axios.post(`${API_URL}/api/add_playlist/`, {name: playlistName, urls: urls, room_id: roomId});
                 handleClose();
             } catch (error) {
                 setError(true);
@@ -48,6 +50,22 @@ const AddPlaylistDialog = ({roomId}) => {
             }
         }
     }
+
+    const handleAddMoreUrl = () => {
+        setUrls([...urls, '']);
+    };
+
+    const handleUrlChange = (value, index) => {
+        const newUrls = [...urls];
+        newUrls[index] = value;
+        setUrls(newUrls);
+    };
+
+    const handleRemoveUrl = (index) => {
+        if (urls.length > 1) {
+            setUrls(urls.filter((_, i) => i !== index));
+        }
+    };
 
     return (
         <>
@@ -63,9 +81,9 @@ const AddPlaylistDialog = ({roomId}) => {
                 <DialogTitle id="alert-dialog-title">
                     Добавить плейлист
                 </DialogTitle>
-                <DialogContent>
+                <DialogContent style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
                     <DialogContentText id="alert-dialog-description">
-                        Мы поддерживаем в данный момент плейлисты из сервисов:<br/>1) yandex music
+                        Мы поддерживаем в данный момент плейлисты из сервисов:<br/>1) yandex music<br/>2) spotify
                     </DialogContentText>
                     {/*<div className="main">*/}
                     {/*    <div className="up">*/}
@@ -116,18 +134,33 @@ const AddPlaylistDialog = ({roomId}) => {
                         onChange={e => setPlaylistName(e.target.value)}
                         type="text"
                         autoComplete="off"
-                        sx={{marginTop: 2}}
+                        style={{marginTop: 20, marginBottom: 5}}
                         required
                     />
-                    <TextField
-                        label="Вставьте ссылку"
-                        fullWidth
-                        value={url}
-                        onChange={e => setUrl(e.target.value)}
-                        type="url"
-                        autoComplete="off"
-                        sx={{marginTop: 1}}
-                    />
+                    {urls.map((url, index) => (
+                        <div style={{display: "flex", width: '100%', position: "relative", alignItems: "center"}}>
+                            <TextField
+                                key={index}
+                                label="Вставьте ссылку"
+                                fullWidth
+                                value={url}
+                                onChange={e => handleUrlChange(e.target.value, index)}
+                                type="url"
+                                autoComplete="off"
+                                style={{marginTop: 5, marginBottom: 5}}
+                            />
+                            <img src={Remove} alt={'убрать ссылку'} width={20} height={20} style={{position: "absolute", right: 5, cursor: "pointer"}} onClick={() => handleRemoveUrl(index)}/>
+                        </div>
+                    ))}
+                    <div style={{width: '100%', marginTop: 10}}>
+                        <div style={{display: "flex", flexDirection: "row", alignItems: "center", cursor: "pointer"}}
+                             onClick={handleAddMoreUrl}>
+                            <img src={Plus} alt={'добавить еще ссылку'} width={20} height={20}/>
+                            <div style={{color: 'rgba(0, 0, 0, 0.5)', marginLeft: 5}}>
+                                Добавить еще ссылку
+                            </div>
+                        </div>
+                    </div>
                     {error &&
                         <div style={{position: "absolute", bottom: 110, color: "red"}}>
                             Произошла ошибка
@@ -138,7 +171,7 @@ const AddPlaylistDialog = ({roomId}) => {
                         onClick={addPlaylist}
                         style={{paddingTop: 15, paddingBottom: 15, marginTop: 60}}
                     >
-                        Добавить плейлист
+                        {urls.length > 1? 'Добавить как один': 'Добавить плейлист'}
                     </MyButton>
                 </DialogContent>
             </Dialog>

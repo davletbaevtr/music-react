@@ -501,7 +501,7 @@ const Room = () => {
                                         width: 170,
                                         marginRight: 30,
                                         minWidth: 170,
-                                        cursor: roomData.seats[0] == null ? "pointer" : 'default'
+                                        cursor: roomData.seats && roomData.seats[0] == null ? "pointer" : 'default'
                                     }}
                                     key={0}
                                     onClick={

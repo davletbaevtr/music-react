@@ -293,6 +293,7 @@ const Room = () => {
 
     const checkFirstPassword = () => {
         const wsUrl = `${WS_API_URL}/ws/rooms/${roomId}/?user_id=${store.user_id}&password=${password}`;
+        console.log(store.user_id);
         const ws = new WebSocket(wsUrl);
         setAudioUrl('');
 

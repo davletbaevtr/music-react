@@ -292,7 +292,7 @@ const Room = () => {
     }, [volume]);
 
     const checkFirstPassword = () => {
-        const wsUrl = `${WS_API_URL}/ws/rooms/${roomId}/?user_id=${roomId}&password=${password}`;
+        const wsUrl = `${WS_API_URL}/ws/rooms/${roomId}/?user_id=${store.user_id}&password=${password}`;
         const ws = new WebSocket(wsUrl);
         setAudioUrl('');
 

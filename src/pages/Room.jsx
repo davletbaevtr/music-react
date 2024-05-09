@@ -780,6 +780,7 @@ const Room = () => {
                                                                         <div style={{
                                                                             width: '100%',
                                                                             height: 15,
+                                                                            minHeight: 15,
                                                                             backgroundColor: '#ddd'
                                                                         }}>
                                                                             <div style={{

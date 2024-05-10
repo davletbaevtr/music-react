@@ -696,7 +696,7 @@ const Room = () => {
                                                                         <div>
                                                                             {audioImg &&
                                                                                 <img
-                                                                                    src={`https://${audioImg}`}
+                                                                                    src={`${audioImg}`}
                                                                                     alt='audio img'
                                                                                     width={30}
                                                                                     height={30}
@@ -784,7 +784,7 @@ const Room = () => {
                                                                         <div style={{display: "flex"}}>
                                                                             {audioImg &&
                                                                                 <img
-                                                                                    src={`https://${audioImg}`}
+                                                                                    src={`{audioImg}`}
                                                                                     alt='audio img'
                                                                                     width={300}
                                                                                     height={300}

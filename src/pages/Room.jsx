@@ -696,7 +696,7 @@ const Room = () => {
                                                                         <div>
                                                                             {audioImg &&
                                                                                 <img
-                                                                                    src={`${audioImg}`}
+                                                                                    src={audioImg}
                                                                                     alt='audio img'
                                                                                     width={30}
                                                                                     height={30}
@@ -744,7 +744,7 @@ const Room = () => {
                                                                 <div style={{display: "flex"}}>
                                                                     {audioImg &&
                                                                         <img
-                                                                            src={`${audioImg}`}
+                                                                            src={audioImg}
                                                                             alt='audio img'
                                                                             width={300}
                                                                             height={300}
@@ -784,7 +784,7 @@ const Room = () => {
                                                                         <div style={{display: "flex"}}>
                                                                             {audioImg &&
                                                                                 <img
-                                                                                    src={`{audioImg}`}
+                                                                                    src={audioImg}
                                                                                     alt='audio img'
                                                                                     width={300}
                                                                                     height={300}

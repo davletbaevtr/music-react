@@ -786,8 +786,8 @@ const Room = () => {
                                                                                 <img
                                                                                     src={audioImg}
                                                                                     alt='audio img'
-                                                                                    width={300}
-                                                                                    height={300}
+                                                                                    width={200}
+                                                                                    height={200}
                                                                                     style={{borderRadius: 10}}
                                                                                 />
                                                                             }

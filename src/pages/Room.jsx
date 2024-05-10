@@ -36,8 +36,6 @@ const Room = () => {
     const [duration, setDuration] = useState(0);
     const [volume, setVolume] = useState(0);
 
-    const [iKnowIsClickable, setIKnowIsClickable] = useState(true);
-
     const [audioTitle, setAudioTitle] = useState('');
     const [audioArtists, setAudioArtists] = useState([]);
 
@@ -46,8 +44,6 @@ const Room = () => {
     const [showAnswer, setShowAnswer] = useState(false);
 
     const [audioImg, setAudioImg] = useState(null);
-
-    const [nextTrackIsClickable, setNextTrackIsClickable] = useState(true);
 
     const handleMessage = (event) => {
         const result = JSON.parse(event.data);
@@ -392,17 +388,10 @@ const Room = () => {
     };
 
     const handleNextTrack = () => {
-        if (!nextTrackIsClickable) {
-            return;
-        }
-        setNextTrackIsClickable(false);
         if (websocket && websocket.readyState === WebSocket.OPEN) {
             const message = JSON.stringify({type: 'next_track', user_id: store.user_id});
             websocket.send(message);
         }
-        setTimeout(() => {
-            setIKnowIsClickable(true);
-        }, 5000);
     }
 
     const handleAnswer = (action) => {
@@ -413,18 +402,10 @@ const Room = () => {
     }
 
     const handleIKnow = () => {
-        if (!iKnowIsClickable) {
-            return;
-        }
-        console.log('click')
-        setIKnowIsClickable(false);
         if (websocket && websocket.readyState === WebSocket.OPEN) {
             const message = JSON.stringify({type: 'i_know', user_id: store.user_id});
             websocket.send(message);
         }
-        setTimeout(() => {
-            setIKnowIsClickable(true);
-        }, 1000);
     }
 
     useEffect(() => {
@@ -763,7 +744,7 @@ const Room = () => {
                                                                 <div style={{display: "flex"}}>
                                                                     {audioImg &&
                                                                         <img
-                                                                            src={`https://${audioImg}`}
+                                                                            src={`${audioImg}`}
                                                                             alt='audio img'
                                                                             width={300}
                                                                             height={300}

@@ -1,5 +1,4 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {TextField} from "@mui/material";
 import MyButton from "../components/UI/MyButton";
 import axios from "axios";
 import {API_URL, WS_API_URL} from "../utils/consts";
@@ -8,21 +7,35 @@ import {observer} from "mobx-react-lite";
 import RoomTable from "../components/UI/RoomTable";
 import {Context} from "../index";
 import log from 'loglevel';
+import {Controller, useForm} from "react-hook-form";
+import {schemaCreateRoom} from "../utils/shema";
+import {yupResolver} from "@hookform/resolvers/yup";
+import {TextField} from "@mui/material";
+import {Input} from "../components/UI/Input.jxs";
 
 log.setLevel(log.levels.DEBUG);
 
 const Rooms = () => {
     const {store} = useContext(Context);
     const [rooms, setRooms] = useState([]);
-    const [roomName, setRoomName] = useState('');
-    const [roomPassword, setRoomPassword] = useState('');
     const [roomInfo, setRoomInfo] = useState({});
-    const [maxRounds, setMaxRounds] = useState(4);
-    const [playersCount, setPlayersCount] = useState(4);
-    // TODO
-    const [createRoomError, setCreateRoomError] = useState(false);
     const [websocket, setWebsocket] = useState(null);
     const [currentRoomId, setCurrentRoomId] = useState(null);
+    const [createRoomError, setCreateRoomError] = useState(false);
+
+    const {control, handleSubmit, setValue, watch, formState: {errors}} = useForm({
+        mode: "onBlur",
+        resolver: yupResolver(schemaCreateRoom),
+        defaultValues: {
+            name: '',
+            password: '',
+            max_rounds: '4',
+            players_count: '4'
+        }
+    });
+
+    const maxRounds = watch('max_rounds');
+    const playersCount = watch('players_count');
 
     useEffect(() => {
         log.debug('Try to connect WebSocket')
@@ -78,23 +91,13 @@ const Rooms = () => {
     const filteredRooms = searchText ? rooms.filter(row => row.name.toLowerCase().includes(searchText.toLowerCase())) : rooms;
 
 
-    const handleCreateRoom = async () => {
-        if (roomName.length > 0) {
-            try {
-                const {data} = await axios.post(
-                    `${API_URL}/api/create_room/`,
-                    {
-                        name: roomName,
-                        password: roomPassword,
-                        max_rounds: maxRounds,
-                        players_count: playersCount,
-                        creator: store.user_id,
-                    },
-                )
-                navigate(`/rooms/${data.id}`)
-            } catch (error) {
-                setCreateRoomError(true);
-            }
+    const handleCreateRoom = async (data) => {
+        console.log(data);
+        try {
+            const response = await axios.post(`${API_URL}/api/create_room/`, {...data, creator: store.user_id});
+            navigate(`/rooms/${response.data.id}`);
+        } catch (error) {
+            setCreateRoomError(true);
         }
     };
 
@@ -109,15 +112,6 @@ const Rooms = () => {
     const handleConnectRoom = () => {
         navigate(`/rooms/${currentRoomId}`)
     }
-
-    const handleMaxRoundsChange = (event) => {
-        setMaxRounds(event.target.value);
-    };
-
-    const handlePlayersCountChange = (event) => {
-        setPlayersCount(event.target.value);
-    }
-
 
     return (
         <div style={{
@@ -170,7 +164,12 @@ const Rooms = () => {
                 }}>
                     {
                         Object.keys(roomInfo).length > 0 ? (
-                            <div style={{display: "flex", flexDirection: "column", justifyContent: "space-between", height: "100%"}}>
+                            <div style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "space-between",
+                                height: "100%"
+                            }}>
                                 <div>
                                     <div>
                                         Статус: {roomInfo.round === 0 ? 'Ожидание игроков' : `${roomInfo.round}/${roomInfo.max_rounds}`}
@@ -205,51 +204,75 @@ const Rooms = () => {
                         justifyContent: "space-between",
                     }}
                 >
-                    <div>
-                        <TextField
-                            label="Название комнаты"
-                            variant="outlined"
-                            fullWidth
-                            value={roomName}
-                            onChange={e => setRoomName(e.target.value)}
-                            type='text'
-                            autoComplete="off"
-                            sx={{
-                                '& .MuiOutlinedInput-root': {
-                                    borderRadius: '15px'
-                                },
-                                marginBottom: '10px'
-                            }}
+                    <form noValidate onSubmit={handleSubmit(handleCreateRoom)} style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+                        <Controller
+                            name="name"
+                            control={control}
+                            render={({field}) => (
+                                <Input
+                                    {...field}
+                                    label="Введите название комнаты"
+                                    type="text"
+                                    error={!!errors.name}
+                                    helperText={errors?.name?.message}
+                                    required
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            borderRadius: '15px'
+                                        },
+                                        marginBottom: '0px',
+                                        marginTop: '5px'
+                                    }}
+                                />
+                            )}
                         />
-                        <TextField
-                            label="Пароль комнаты (опционально)"
-                            variant="outlined"
-                            fullWidth
-                            value={roomPassword}
-                            onChange={e => setRoomPassword(e.target.value)}
-                            type="new-password"
-                            autoComplete="off"
-                            sx={{
-                                '& .MuiOutlinedInput-root': {
-                                    borderRadius: '15px'
-                                },
-                                marginBottom: '15px'
-                            }}
+                        <Controller
+                            name="password"
+                            control={control}
+                            render={({field}) => (
+                                <Input
+                                    {...field}
+                                    label="Password"
+                                    type="password"
+                                    error={!!errors.password}
+                                    helperText={errors?.password?.message}
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            borderRadius: '15px'
+                                        },
+                                        marginBottom: '10px'
+                                    }}
+                                />
+                            )}
                         />
-                        <div className="rounds-slider-container">
-                            <input type="range" min="1" max="10" value={maxRounds} className="range-slider"
-                                   id="roundsRange" onChange={handleMaxRoundsChange}/>
-                            <div style={{marginTop: 10}} id="roundsValue">Количество раундов: {maxRounds}</div>
-                        </div>
-                        <div className="rounds-slider-container">
-                            <input type="range" min="1" max="8" value={playersCount} className="range-slider"
-                                   id="playersCountRange" onChange={handlePlayersCountChange}/>
-                            <div style={{marginTop: 10}} id="playersCountValue">Количество игроков: {playersCount}</div>
-                        </div>
-                    </div>
-                    <MyButton onClick={handleCreateRoom} style={{padding: '15px 10px'}}>
-                        Создать комнату
-                    </MyButton>
+                        <Controller
+                            name="max_rounds"
+                            control={control}
+                            render={({field}) => (
+                                <div className="rounds-slider-container">
+                                    <input {...field} type="range" min="1" max="10" className="range-slider"
+                                           id="roundsRange"/>
+                                    <div style={{marginTop: 10}} id="roundsValue">Количество
+                                        раундов: {maxRounds}</div>
+                                </div>
+                            )}
+                        />
+                        <Controller
+                            name="players_count"
+                            control={control}
+                            render={({field}) => (
+                                <div className="rounds-slider-container">
+                                    <input {...field} type="range" min="1" max="8" className="range-slider"
+                                           id="playersCountRange"/>
+                                    <div style={{marginTop: 10}} id="playersCountValue">Количество
+                                        игроков: {playersCount}</div>
+                                </div>
+                            )}
+                        />
+                        <MyButton type="submit" style={{padding: '15px 10px', marginTop: 20}}>
+                            Создать комнату
+                        </MyButton>
+                    </form>
                 </div>
             </div>
         </div>

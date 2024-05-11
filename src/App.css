@@ -39,6 +39,10 @@
     background-color: rgba(25, 118, 210, 0.16);
 }
 
+.rounds-slider-container {
+    width: 100%;
+}
+
 .range-slider {
     -webkit-appearance: none;
     width: 100%;

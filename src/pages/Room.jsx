@@ -143,6 +143,7 @@ const Room = () => {
                 setAudioArtists(result.message.artists)
                 setAudioImg(result.message.cover_uri)
                 setShowAnswer(false);
+                setKnowButtonVisible(false);
                 break;
             case 'round_update':
                 setRoomData(previousData => {
@@ -196,13 +197,18 @@ const Room = () => {
 
     useEffect(() => {
         const audio = document.getElementById('audioPlayer');
+        let timeoutHandle;
+
         if (audioUrl) {
             console.log(audioUrl);
 
             if (audio) {
                 audio.load();
-                setTimeout(() => {
-                    audio.play().catch(error => console.log("Ошибка воспроизведения:", error));
+
+                timeoutHandle = setTimeout(() => {
+                    if (roomData.round && roomData.max_rounds && roomData.round <= roomData.max_rounds) {
+                        audio.play().catch(error => console.log("Ошибка воспроизведения:", error));
+                    }
                     setKnowButtonVisible(true);
                 }, 3000);
 
@@ -213,13 +219,19 @@ const Room = () => {
                 console.log("Элемент audio не найден в DOM");
             }
         }
+
         return () => {
+            if (timeoutHandle) {
+                clearTimeout(timeoutHandle);
+            }
+
             if (audio) {
                 audio.pause();
                 audio.currentTime = 0;
             }
         };
     }, [audioUrl]);
+
 
     useEffect(() => {
         if (volume !== 0) {
@@ -256,6 +268,7 @@ const Room = () => {
 
         const handleAudioFinish = () => {
             setShowAnswer(true);
+            setKnowButtonVisible(false);
         };
 
         if (audio) {
@@ -470,7 +483,7 @@ const Room = () => {
                             <div style={{
                                 display: "flex",
                                 justifyContent: "space-between",
-                                height: 450,
+                                height: 500,
                                 alignItems: 'end',
                                 width: "100%"
                             }}>
@@ -551,8 +564,8 @@ const Room = () => {
                                     <div
                                         style={{
                                             boxShadow: '0 0 5px 1px rgba(0, 0, 0, 0.2)',
-                                            height: 420,
-                                            borderRadius: 30,
+                                            height: 500,
+                                            borderRadius: 10,
                                             marginRight: 30,
                                             width: 250,
                                             overflow: "auto"
@@ -605,8 +618,8 @@ const Room = () => {
                                         }
                                     </div>
                                     <div style={{
-                                        boxShadow: '0 0 5px 1px rgba(0, 0, 0, 0.2)',
-                                        height: 420,
+                                        // boxShadow: '0 0 5px 1px rgba(0, 0, 0, 0.2)',
+                                        height: 500,
                                         borderRadius: 30,
                                         flexGrow: 1,
                                         minWidth: 490
@@ -837,7 +850,7 @@ const Room = () => {
                                                                 <>
                                                                     {roomData.seats && roomData.seats[0] === store.user_id &&
                                                                         <div
-                                                                            style={{display: "flex", marginBottom: 15, marginLeft: 15, marginRight: 5}}
+                                                                            style={{display: "flex", marginBottom: 60, marginLeft: 15, marginRight: 5}}
                                                                         >
                                                                             {audioImg &&
                                                                                 <img
@@ -921,35 +934,16 @@ const Room = () => {
                                                                             </div>
                                                                         </label>
                                                                     </div>
-                                                                    {duration != 0 &&
-                                                                        <div style={{
-                                                                            height: 10,
-                                                                            maxHeight: 10,
-                                                                            minHeight: 10,
-                                                                            backgroundColor: '#ddd',
-                                                                            borderRadius: 10,
-                                                                            width: '95%',
-                                                                            marginBottom: 15
-                                                                        }}>
-                                                                            <div style={{
-                                                                                height: '100%',
-                                                                                backgroundColor: '#527BE5',
-                                                                                width: `${(currentTime / duration) * 100}%`,
-                                                                                borderRadius: 10
-                                                                            }}/>
-                                                                        </div>
-                                                                    }
                                                                     {roomData.seats && roomData.seats.slice(1).includes(store.user_id) && knowButtonVisible &&
-                                                                        <MyButton
+                                                                        <button
                                                                             id='i_know'
                                                                             onClick={handleIKnow}
-                                                                            style={{
-                                                                                marginBottom: 15,
-                                                                                backgroundColor: '#527BE5'
-                                                                            }}
+                                                                            className='i-know-button'
                                                                         >
-                                                                            Я знаю
-                                                                        </MyButton>
+                                                                            <span>
+                                                                                Я знаю
+                                                                            </span>
+                                                                        </button>
                                                                     }
                                                                 </>
                                                             }
@@ -960,6 +954,24 @@ const Room = () => {
                                                                 }}>
                                                                     Следующий трек
                                                                 </MyButton>
+                                                            }
+                                                            {duration != 0 &&
+                                                                <div style={{
+                                                                    height: 10,
+                                                                    maxHeight: 10,
+                                                                    minHeight: 10,
+                                                                    backgroundColor: '#ddd',
+                                                                    borderRadius: 10,
+                                                                    width: '95%',
+                                                                    marginBottom: 15
+                                                                }}>
+                                                                    <div style={{
+                                                                        height: '100%',
+                                                                        backgroundColor: '#527BE5',
+                                                                        width: `${(currentTime / duration) * 100}%`,
+                                                                        borderRadius: 10
+                                                                    }}/>
+                                                                </div>
                                                             }
                                                         </div>
                                                     </>
@@ -995,8 +1007,8 @@ const Room = () => {
                                 </div>
                                 <div style={{
                                     boxShadow: '0 0 5px 1px rgba(0, 0, 0, 0.2)',
-                                    height: 420,
-                                    borderRadius: 30,
+                                    height: 500,
+                                    borderRadius: 10,
                                     marginRight: 30,
                                     width: 250,
                                     marginLeft: 30
@@ -1008,7 +1020,7 @@ const Room = () => {
                             </div>
                             <div style={{
                                 display: "flex",
-                                height: 320,
+                                height: '100%',
                                 marginTop: 30,
                                 width: "100%",
                                 justifyContent: "center",

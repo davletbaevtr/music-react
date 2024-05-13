@@ -199,3 +199,36 @@
     }
 }
 
+.i-know-button {
+    all: unset;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.i-know-button span{
+    background-color: #527BE5;
+    width: 150px;
+    height: 150px;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: iknow 1s ease-in-out;
+    font-weight: 600;
+    font-size: 20px;
+    color: white;
+}
+
+@keyframes iknow {
+    0% {
+        opacity: 0;
+        transform: scale(1.5);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+

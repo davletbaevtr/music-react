@@ -15,7 +15,7 @@ import Remove from '../../assets/remove.svg'
 import {yupResolver} from "@hookform/resolvers/yup";
 import {Controller, useForm} from "react-hook-form";
 import {schemaAddPlaylist} from '../../utils/shema'
-import {Input} from "./Input.jxs";
+import {Input} from "./Input";
 
 const AddPlaylistDialog = ({roomId}) => {
     const {store} = useContext(Context);

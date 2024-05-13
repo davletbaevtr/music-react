@@ -11,7 +11,7 @@ import {Controller, useForm} from "react-hook-form";
 import {schemaCreateRoom} from "../utils/shema";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {TextField} from "@mui/material";
-import {Input} from "../components/UI/Input.jxs";
+import {Input} from "../components/UI/Input";
 
 log.setLevel(log.levels.DEBUG);
 

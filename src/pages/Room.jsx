@@ -13,6 +13,8 @@ import DialogContentText from "@mui/material/DialogContentText";
 import Plus from '../assets/plus.svg'
 import Profile from '../assets/profile.svg'
 import Remove from '../assets/remove.svg'
+import Countdown from "../components/UI/CountDown";
+import AudioVisualizer from "../components/UI/AudioVisualizer";
 
 function SlideTransition(props) {
     return <Slide {...props} direction="up"/>;
@@ -30,7 +32,6 @@ const Room = () => {
     const [needReconnect, setNeedReconnect] = useState(false);
     const [authError, setAuthError] = useState(false);
     const [audioUrl, setAudioUrl] = useState('');
-    const [countdown, setCountdown] = useState(0);
 
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
@@ -47,6 +48,7 @@ const Room = () => {
 
     const handleMessage = (event) => {
         const result = JSON.parse(event.data);
+        console.log(result);
         switch (result.type) {
             case 'initial_room':
                 setRoomData(result.room_data);
@@ -196,17 +198,6 @@ const Room = () => {
         const audio = document.getElementById('audioPlayer');
         if (audioUrl) {
             console.log(audioUrl);
-
-            setCountdown(3); // Установка таймера на 3 секунды
-            const interval = setInterval(() => {
-                setCountdown((currentCountdown) => {
-                    if (currentCountdown <= 1) {
-                        clearInterval(interval); // Очистка интервала, когда таймер достигает 0
-                        return 0;
-                    }
-                    return currentCountdown - 1;
-                });
-            }, 1000);
 
             if (audio) {
                 audio.load();
@@ -389,6 +380,7 @@ const Room = () => {
 
     const handleNextTrack = () => {
         if (websocket && websocket.readyState === WebSocket.OPEN) {
+            console.log(store.user_id)
             const message = JSON.stringify({type: 'next_track', user_id: store.user_id});
             websocket.send(message);
         }
@@ -410,7 +402,7 @@ const Room = () => {
 
     useEffect(() => {
         const handleKeyPress = (event) => {
-            if (event.key === 'Enter') {
+            if (event.key === 'Enter' && roomData.seats && roomData.seats.slice(1).includes(store.user_id)) {
                 document.getElementById('i_know').click();
             }
         };
@@ -420,7 +412,7 @@ const Room = () => {
         return () => {
             document.removeEventListener('keypress', handleKeyPress);
         };
-    }, []);
+    }, [roomData.seats, store.user_id]);
 
     const handleVolumeToggle = () => {
         if (volume === 0) {
@@ -616,7 +608,8 @@ const Room = () => {
                                         boxShadow: '0 0 5px 1px rgba(0, 0, 0, 0.2)',
                                         height: 420,
                                         borderRadius: 30,
-                                        flexGrow: 1
+                                        flexGrow: 1,
+                                        minWidth: 490
                                     }}>
                                         {roomData.round === 0 ?
                                             (
@@ -626,15 +619,36 @@ const Room = () => {
                                                         roomData.seats && roomData.seats[0] === store.user_id
                                                             ?
                                                             (
-                                                                roomData.playlists && Object.keys(roomData.playlists).length > 0
-                                                                    ?
-                                                                    <MyButton onClick={handleNextTrack}>
-                                                                        Начать игру
-                                                                    </MyButton>
-                                                                    :
-                                                                    <div>
-                                                                        Ожидаем плейлисты от игроков
-                                                                    </div>
+                                                                <div
+                                                                    style={{
+                                                                        display: "flex",
+                                                                        flexDirection: "column",
+                                                                        height: '100%',
+                                                                        alignItems: "center",
+                                                                        justifyContent: "center",
+                                                                        fontSize: 40,
+                                                                        textAlign: "center",
+                                                                        fontWeight: 600
+                                                                    }}
+                                                                >
+                                                                    {
+                                                                        roomData.playlists &&
+                                                                        Object.keys(roomData.playlists).length > 0
+                                                                            ?
+                                                                            <>
+                                                                                <div style={{marginBottom: 15}}>
+                                                                                    Готовы начинать?
+                                                                                </div>
+                                                                                <MyButton onClick={handleNextTrack}>
+                                                                                    Начать игру
+                                                                                </MyButton>
+                                                                            </>
+                                                                            :
+                                                                            <div>
+                                                                                Ожидаем плейлисты от игроков
+                                                                            </div>
+                                                                    }
+                                                                </div>
                                                             )
                                                             :
                                                             <div style={{
@@ -689,38 +703,78 @@ const Room = () => {
                                                                     Отвечает {roomData.i_know_pause ? `${roomData.i_know_pause.username}` : ''}
                                                                 </DialogTitle>
                                                                 <DialogContent>
-                                                                    <DialogContentText id="alert-dialog-description">
-                                                                        здесь полоска отсчета таймера в будущем
-                                                                    </DialogContentText>
-                                                                    {roomData.seats && roomData.seats[0] === store.user_id &&
+                                                                    {/*<DialogContentText id="alert-dialog-description">*/}
+                                                                    {/*    здесь полоска отсчета таймера в будущем*/}
+                                                                    {/*</DialogContentText>*/}
+                                                                    {roomData.seats && roomData.seats[0] === store.user_id ?
                                                                         <div>
-                                                                            {audioImg &&
-                                                                                <img
-                                                                                    src={audioImg}
-                                                                                    alt='audio img'
-                                                                                    width={30}
-                                                                                    height={30}
-                                                                                    style={{borderRadius: 5}}
-                                                                                />
-                                                                            }
-                                                                            <div style={{fontSize: 20}}>
-                                                                                title: {audioTitle}
+                                                                            <div style={{display: "flex", marginBottom: 10}}>
+                                                                                {audioImg &&
+                                                                                    <img
+                                                                                        src={audioImg}
+                                                                                        alt='audio img'
+                                                                                        width={80}
+                                                                                        height={80}
+                                                                                        style={{
+                                                                                            borderRadius: 5,
+                                                                                            marginRight: 10
+                                                                                        }}
+                                                                                    />
+                                                                                }
+                                                                                <div style={{
+                                                                                    display: "flex",
+                                                                                    flexDirection: "column",
+                                                                                    justifyContent: "center"
+                                                                                }}>
+                                                                                    <div style={{
+                                                                                        fontSize: 20,
+                                                                                        fontWeight: 700
+                                                                                    }}>
+                                                                                        {audioTitle}
+                                                                                    </div>
+                                                                                    <div style={{
+                                                                                        fontSize: 20,
+                                                                                        marginBottom: 10
+                                                                                    }}>
+                                                                                        <div style={{
+                                                                                            marginBottom: 10
+                                                                                        }}>
+                                                                                            {audioArtists.join(', ')}
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
                                                                             </div>
-                                                                            <div style={{fontSize: 20}}>
-                                                                                artists:
-                                                                                {audioArtists.map((name) => (
-                                                                                    ` ${name}, `
-                                                                                ))}
+                                                                            <div style={{
+                                                                                display: "flex",
+                                                                                justifyContent: "space-between"
+                                                                            }}>
+                                                                                <MyButton
+                                                                                    onClick={() => handleAnswer('right')}
+                                                                                    style={{
+                                                                                        flexGrow: 1,
+                                                                                        marginRight: 10,
+                                                                                        backgroundColor: "#33CC66",
+                                                                                        color: "white"
+                                                                                    }}
+                                                                                >
+                                                                                    Верно
+                                                                                </MyButton>
+                                                                                <MyButton
+                                                                                    onClick={() => handleAnswer('wrong')}
+                                                                                    style={{
+                                                                                        flexGrow: 1,
+                                                                                        marginLeft: 10,
+                                                                                        backgroundColor: "#FF0000",
+                                                                                        color: "white"
+                                                                                    }}
+                                                                                >
+                                                                                    Неверно
+                                                                                </MyButton>
                                                                             </div>
-                                                                            <MyButton
-                                                                                onClick={() => handleAnswer('right')}>
-                                                                                Правильно
-                                                                            </MyButton>
-                                                                            <MyButton
-                                                                                onClick={() => handleAnswer('wrong')}>
-                                                                                Неправильно
-                                                                            </MyButton>
-                                                                        </div>
+                                                                        </div>:
+                                                                        <>
+                                                                            Ожидаем ведущего
+                                                                        </>
                                                                     }
                                                                 </DialogContent>
                                                             </Dialog>
@@ -728,83 +782,106 @@ const Room = () => {
                                                         <div style={{
                                                             display: "flex",
                                                             flexDirection: "column",
-                                                            justifyContent: "space-between",
-                                                            height: '100%'
+                                                            height: '100%',
+                                                            position: "relative",
+                                                            alignItems: "center",
+                                                            justifyContent: 'end'
                                                         }}>
-                                                            <div>
-                                                                Игра идет<br/> раунд:{roomData.round}
+                                                            <div style={{
+                                                                fontSize: 25,
+                                                                fontWeight: 600,
+                                                                position: "absolute",
+                                                                top: 10
+                                                            }}>
+                                                                Раунд: {roomData.round}
                                                             </div>
-                                                            {countdown !== 0 && (
-                                                                <div style={{fontSize: 32}}>
-                                                                    {countdown} секунд(ы)
-                                                                </div>
-                                                            )}
-
+                                                            <Countdown audioUrl={audioUrl}/>
                                                             {showAnswer ?
-                                                                <div style={{display: "flex"}}>
+                                                                <div style={{
+                                                                    display: "flex",
+                                                                    marginBottom: 15,
+                                                                    height: '100%',
+                                                                    alignItems: "center",
+                                                                    marginTop: 20,
+                                                                    marginLeft: 15,
+                                                                    marginRight: 5
+                                                                }}>
                                                                     {audioImg &&
                                                                         <img
                                                                             src={audioImg}
                                                                             alt='audio img'
-                                                                            width={300}
-                                                                            height={300}
-                                                                            style={{borderRadius: 10}}
+                                                                            width={250}
+                                                                            height={250}
+                                                                            style={{borderRadius: 10, marginRight: 15}}
                                                                         />
                                                                     }
-                                                                    <div>
-                                                                        <div style={{fontSize: 20}}>
+                                                                    <div style={{
+                                                                        display: "flex",
+                                                                        flexDirection: "column",
+                                                                        justifyContent: "center"
+                                                                    }}>
+                                                                        <div style={{fontSize: 30, fontWeight: 700}}>
                                                                             {audioTitle}
                                                                         </div>
-                                                                        <div style={{fontSize: 16}}>
-                                                                            {audioArtists.map((name) => (
-                                                                                ` ${name}, `
-                                                                            ))}
+                                                                        <div style={{fontSize: 30, marginBottom: 10}}>
+                                                                            <div style={{
+                                                                                fontSize: 30,
+                                                                                marginBottom: 10
+                                                                            }}>
+                                                                                {audioArtists.join(', ')}
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 :
                                                                 <>
-                                                                    {duration === 0 ?
-                                                                        <div style={{height: 15}}></div>
-                                                                        :
-                                                                        <div style={{
-                                                                            width: '100%',
-                                                                            height: 15,
-                                                                            minHeight: 15,
-                                                                            backgroundColor: '#ddd'
-                                                                        }}>
-                                                                            <div style={{
-                                                                                height: '100%',
-                                                                                backgroundColor: 'blue',
-                                                                                width: `${(currentTime / duration) * 100}%`
-                                                                            }}/>
-                                                                        </div>
-                                                                    }
                                                                     {roomData.seats && roomData.seats[0] === store.user_id &&
-                                                                        <div style={{display: "flex"}}>
+                                                                        <div
+                                                                            style={{display: "flex", marginBottom: 15, marginLeft: 15, marginRight: 5}}
+                                                                        >
                                                                             {audioImg &&
                                                                                 <img
                                                                                     src={audioImg}
                                                                                     alt='audio img'
                                                                                     width={200}
                                                                                     height={200}
-                                                                                    style={{borderRadius: 10}}
+                                                                                    style={{
+                                                                                        borderRadius: 5,
+                                                                                        marginRight: 15
+                                                                                    }}
                                                                                 />
                                                                             }
-                                                                            <div>
-                                                                                <div style={{fontSize: 20}}>
+                                                                            <div style={{
+                                                                                display: "flex",
+                                                                                flexDirection: "column",
+                                                                                justifyContent: "center"
+                                                                            }}>
+                                                                                <div style={{
+                                                                                    fontSize: 30,
+                                                                                    fontWeight: 700
+                                                                                }}>
                                                                                     {audioTitle}
                                                                                 </div>
-                                                                                <div style={{fontSize: 16}}>
-                                                                                    {audioArtists.map((name) => (
-                                                                                        ` ${name}, `
-                                                                                    ))}
+                                                                                <div style={{
+                                                                                    fontSize: 30,
+                                                                                    marginBottom: 10
+                                                                                }}>
+                                                                                    <div style={{
+                                                                                        fontSize: 30,
+                                                                                        marginBottom: 10
+                                                                                    }}>
+                                                                                        {audioArtists.join(', ')}
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                     }
                                                                     <div>
-                                                                        <label className="slider">
+                                                                        <label className="slider" style={{
+                                                                            position: "absolute",
+                                                                            top: 10,
+                                                                            left: 10
+                                                                        }}>
                                                                             <input type="range"
                                                                                    className="level"
                                                                                    value={volume}
@@ -844,10 +921,32 @@ const Room = () => {
                                                                             </div>
                                                                         </label>
                                                                     </div>
+                                                                    {duration != 0 &&
+                                                                        <div style={{
+                                                                            height: 10,
+                                                                            maxHeight: 10,
+                                                                            minHeight: 10,
+                                                                            backgroundColor: '#ddd',
+                                                                            borderRadius: 10,
+                                                                            width: '95%',
+                                                                            marginBottom: 15
+                                                                        }}>
+                                                                            <div style={{
+                                                                                height: '100%',
+                                                                                backgroundColor: '#527BE5',
+                                                                                width: `${(currentTime / duration) * 100}%`,
+                                                                                borderRadius: 10
+                                                                            }}/>
+                                                                        </div>
+                                                                    }
                                                                     {roomData.seats && roomData.seats.slice(1).includes(store.user_id) && knowButtonVisible &&
                                                                         <MyButton
                                                                             id='i_know'
                                                                             onClick={handleIKnow}
+                                                                            style={{
+                                                                                marginBottom: 15,
+                                                                                backgroundColor: '#527BE5'
+                                                                            }}
                                                                         >
                                                                             Я знаю
                                                                         </MyButton>
@@ -855,7 +954,10 @@ const Room = () => {
                                                                 </>
                                                             }
                                                             {roomData.seats && roomData.seats[0] === store.user_id &&
-                                                                <MyButton onClick={handleNextTrack}>
+                                                                <MyButton onClick={handleNextTrack} style={{
+                                                                    marginBottom: 15,
+                                                                    backgroundColor: '#527BE5'
+                                                                }}>
                                                                     Следующий трек
                                                                 </MyButton>
                                                             }

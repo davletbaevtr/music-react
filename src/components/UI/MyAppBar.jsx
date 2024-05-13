@@ -117,7 +117,7 @@ const MyAppBar = () => {
                 }
             </div>
             <div style={{position: "absolute", left: 15, top: 25}}>
-                beta-test1.0
+                beta-test2.0
             </div>
         </div>
     );
